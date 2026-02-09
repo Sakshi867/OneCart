@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-heading: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+
+    --background: 300 25% 98%;
+    --foreground: 300 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 300 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 300 15% 15%;
+
+    --primary: 310 65% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 300 20% 95%;
+    --secondary-foreground: 300 15% 25%;
+
+    --muted: 300 15% 93%;
+    --muted-foreground: 300 10% 50%;
+
+    --accent: 310 45% 92%;
+    --accent-foreground: 310 65% 30%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 300 20% 90%;
+    --input: 300 20% 90%;
+    --ring: 310 65% 60%;
+
+    --radius: 0.75rem;
+
+    /* Category themes - updated with new color specifications */
+    --cat-groceries: 167 63% 47%; /* Fresh Mint Green #2FBF9B */
+    --cat-groceries-light: 166 72% 86%; /* Soft Aqua #A7EDE0 */
+    --cat-groceries-mid: 166 68% 78%; /* Mix of primary and light */
+    --cat-cosmetics: 330 67% 67%; /* Soft Rose Pink #E86C9A */
+    --cat-cosmetics-light: 260 55% 85%; /* Muted Lavender #C8B6E2 */
+    --cat-cosmetics-mid: 300 60% 75%; /* Mix of primary and light */
+    --cat-transport: 217 92% 60%; /* Sky Blue #3B82F6 */
+    --cat-transport-light: 213 94% 78%; /* Soft Blue #93C5FD */
+    --cat-transport-mid: 215 85% 70%; /* Mix of primary and light */
+    --cat-medicines: 173 80% 40%; /* Medical Teal #14B8A6 */
+    --cat-medicines-light: 170 88% 80%; /* Soft Mint #99F6E4 */
+    --cat-medicines-mid: 172 75% 70%; /* Mix of primary and light */
+    --cat-shopping: 28 92% 52%; /* Soft Peach Orange #FB923C */
+    --cat-shopping-light: 30 90% 83%; /* Warm Sand #FED7AA */
+    --cat-shopping-mid: 29 85% 70%; /* Mix of primary and light */
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Category theme overrides - updated with new color specifications */
+  .theme-groceries {
+    --primary: 167 63% 47%; /* Fresh Mint Green #2FBF9B */
+    --primary-foreground: 0 0% 100%;
+    --accent: 166 72% 86%; /* Soft Aqua #A7EDE0 */
+    --accent-foreground: 167 63% 25%; /* Darker version for text */
+    --ring: 167 63% 47%;
+    --background: 160 30% 96%; /* Off-White Green Tint #F4FBF9 */
+  }
+  .theme-cosmetics {
+    --primary: 330 67% 67%; /* Soft Rose Pink #E86C9A */
+    --primary-foreground: 0 0% 100%;
+    --accent: 260 55% 85%; /* Muted Lavender #C8B6E2 */
+    --accent-foreground: 330 67% 35%; /* Darker version for text */
+    --ring: 330 67% 67%;
+    --background: 330 85% 97%; /* Creamy Pink Tint #FFF6FA */
+  }
+  .theme-transport {
+    --primary: 217 92% 60%; /* Sky Blue #3B82F6 */
+    --primary-foreground: 0 0% 100%;
+    --accent: 213 94% 78%; /* Soft Blue #93C5FD */
+    --accent-foreground: 217 92% 30%; /* Darker version for text */
+    --ring: 217 92% 60%;
+    --background: 210 100% 97%; /* Blue-White #F5F9FF */
+  }
+  .theme-medicines {
+    --primary: 173 80% 40%; /* Medical Teal #14B8A6 */
+    --primary-foreground: 0 0% 100%;
+    --accent: 170 88% 80%; /* Soft Mint #99F6E4 */
+    --accent-foreground: 173 80% 20%; /* Darker version for text */
+    --ring: 173 80% 40%;
+    --background: 170 70% 96%; /* Clinical White-Teal #F2FBFA */
+  }
+  .theme-shopping {
+    --primary: 28 92% 52%; /* Soft Peach Orange #FB923C */
+    --primary-foreground: 0 0% 100%;
+    --accent: 30 90% 83%; /* Warm Sand #FED7AA */
+    --accent-foreground: 28 92% 25%; /* Darker version for text */
+    --ring: 28 92% 52%;
+    --background: 30 95% 95%; /* Creamy Beige #FFF7ED */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    @apply font-bold;
+  }
+  
+  /* Mobile-first responsive improvements */
+  @media (max-width: 768px) {
+    body {
+      @apply text-sm;
+    }
+    h1 {
+      @apply text-2xl;
+    }
+    h2 {
+      @apply text-xl;
+    }
+    h3 {
+      @apply text-lg;
+    }
+  }
+  
+  /* Clean UI enhancements */
+  .card {
+    @apply rounded-2xl border border-border bg-card shadow-sm transition-all duration-300;
+  }
+  
+  .card:hover {
+    @apply shadow-md border-primary/20;
+  }
+  
+  .btn-primary {
+    @apply rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95;
+  }
+  
+  .input-field {
+    @apply rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300;
+  }
+  
+  /* Smooth scrolling for better mobile experience */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Better focus states for accessibility */
+  button:focus-visible,
+  input:focus-visible,
+  a:focus-visible {
+    @apply outline-2 outline-primary outline-offset-2 ring-2 ring-primary/30;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--cat-cosmetics)));
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+  }
+  
+  .text-gradient-subtle {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--cat-transport)), hsl(var(--cat-medicines)));
+  }
+  
+  .bg-gradient-soft {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)/0.1) 0%, 
+      hsl(var(--cat-cosmetics)/0.1) 50%, 
+      hsl(var(--cat-transport)/0.1) 100%);
+  }
+  
+  .bg-gradient-vibrant {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)) 0%, 
+      hsl(var(--cat-cosmetics)) 30%, 
+      hsl(var(--cat-transport)) 70%, 
+      hsl(var(--cat-shopping)) 100%);
+    background-size: 300% 300%;
+    animation: gradient-shift 8s ease infinite;
+  }
+}
