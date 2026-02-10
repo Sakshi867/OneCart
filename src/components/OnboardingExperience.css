@@ -8,7 +8,7 @@
 }
 
 .onboarding-container {
-    width: 100%;
+    width: 200%;
     height: 100vh;
     background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
     position: relative;
