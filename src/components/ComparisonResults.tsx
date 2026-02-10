@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Clock, Truck, Badge } from "lucide-react";
+import { Star, Clock, Truck, Badge, ArrowRight, TrendingDown } from "lucide-react";
 import type { MockResult } from "@/lib/categories";
 
 interface ComparisonResultsProps {
@@ -9,8 +10,26 @@ interface ComparisonResultsProps {
 }
 
 const ComparisonResults = ({ results, query, isTransport = false }: ComparisonResultsProps) => {
+  const [sort, setSort] = useState<"price" | "time" | "rating">("price");
+
+  // Mock sorting logic
+  const sortedResults = [...results].sort((a, b) => {
+    if (sort === "price") {
+      return parseInt(a.price.replace(/\D/g, '')) - parseInt(b.price.replace(/\D/g, ''));
+    }
+    if (sort === "time") {
+      // Mock parsing "4 min", "Today", etc. - simplified for demo
+      const getMins = (s: string) => s.includes('min') ? parseInt(s) : 999;
+      return getMins(a.delivery) - getMins(b.delivery);
+    }
+    if (sort === "rating") {
+      return b.rating - a.rating;
+    }
+    return 0;
+  });
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pb-20">
       <div className="flex items-center justify-between">
         <h3 className="font-bold text-foreground">
           {isTransport ? "Fare Comparison" : "Price Comparison"} — <span className="text-primary">{query}</span>
@@ -21,7 +40,7 @@ const ComparisonResults = ({ results, query, isTransport = false }: ComparisonRe
       </div>
 
       <div className="space-y-3">
-        {results.map((r, i) => (
+        {sortedResults.map((r, i) => (
           <motion.div
             key={r.platform}
             initial={{ opacity: 0, y: 15 }}
@@ -54,19 +73,44 @@ const ComparisonResults = ({ results, query, isTransport = false }: ComparisonRe
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col items-end gap-2">
               <div className="text-right">
                 <span className="text-xl font-extrabold text-foreground">{r.price}</span>
                 {r.originalPrice && (
-                  <span className="ml-2 text-sm text-muted-foreground line-through">{r.originalPrice}</span>
+                  <span className="ml-2 text-sm text-muted-foreground line-through decoration-red-400">{r.originalPrice}</span>
                 )}
               </div>
-              <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity shrink-0">
-                {isTransport ? "Book" : "Buy"}
+              <button className="relative overflow-hidden group px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-95 transition-all duration-300">
+                <span className="relative z-10 flex items-center gap-2">
+                  {isTransport ? "Book Ride" : "Buy Now"} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </button>
             </div>
           </motion.div>
         ))}
+      </div>
+
+      {/* Tactile Segmented Control (Fixed Bottom) */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/80 backdrop-blur-xl border border-white/40 shadow-2xl rounded-full p-1.5 flex gap-1 items-center ring-1 ring-black/5">
+        <button
+          onClick={() => setSort("price")}
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${sort === "price" ? "bg-green-100 text-green-700 shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+        >
+          Price
+        </button>
+        <button
+          onClick={() => setSort("time")}
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${sort === "time" ? "bg-blue-100 text-blue-700 shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+        >
+          Time
+        </button>
+        <button
+          onClick={() => setSort("rating")}
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${sort === "rating" ? "bg-yellow-100 text-yellow-700 shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+        >
+          Rating
+        </button>
       </div>
     </div>
   );

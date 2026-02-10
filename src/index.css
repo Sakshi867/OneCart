@@ -64,6 +64,13 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* 3D Onboarding color palette */
+    --onboarding-charcoal: #1a1a1a;
+    --onboarding-cyan: #00d4ff;
+    --onboarding-green: #00ff88;
+    --onboarding-purple: #b388ff;
+    --onboarding-white: #f5f5f5;
   }
 
   /* Category theme overrides - updated with new color specifications */

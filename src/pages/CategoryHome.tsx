@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCategory, type Category } from "@/contexts/CategoryContext";
@@ -8,9 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ComparisonResults from "@/components/ComparisonResults";
 import BackButton from "@/components/BackButton";
+import CategorySubGrid from "@/components/CategorySubGrid";
+import { PriceTicker, Category3DCard, ComparisonHero } from "@/components/SmartSaverComponents";
+import CategoryItemList from "@/components/CategoryItemList";
+import { type SubCategory } from "@/lib/categories";
 
 const CategoryHome = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { setCategory } = useCategory();
   const cat = id as Category;
@@ -18,12 +23,26 @@ const CategoryHome = () => {
   const [showResults, setShowResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchVal, setSearchVal] = useState("");
+  const [activeSubcategory, setActiveSubcategory] = useState<SubCategory | null>(null);
 
   useEffect(() => {
     if (cfg) setCategory(cat);
-    setShowResults(false);
-    setSearchVal("");
-  }, [cat, cfg, setCategory]);
+
+    // Handle query parameter
+    const query = searchParams.get("q");
+    if (query) {
+      setSearchVal(query);
+      setIsSearching(true);
+      setShowResults(false);
+      setTimeout(() => {
+        setIsSearching(false);
+        setShowResults(true);
+      }, 800);
+    } else {
+      setShowResults(false);
+      setSearchVal("");
+    }
+  }, [cat, cfg, setCategory, searchParams]);
 
   if (!cfg) {
     navigate("/dashboard");
@@ -31,6 +50,7 @@ const CategoryHome = () => {
   }
 
   const isTransport = cat === "transport";
+  const isGroceries = cat === "groceries";
 
   const handleSearch = () => {
     setIsSearching(true);
@@ -46,7 +66,10 @@ const CategoryHome = () => {
       {/* Decorative background elements */}
       <div className={`absolute top-10 left-5 w-56 h-56 ${cfg.bgClass.replace('bg-', 'bg-').replace(' to-', '/10 to-')} rounded-full blur-3xl animate-float opacity-30`} />
       <div className="absolute bottom-10 right-5 w-72 h-72 bg-gradient-to-tl from-purple-200/20 to-pink-200/20 rounded-full blur-3xl animate-bounce-gentle opacity-40" />
-      
+
+      {/* SmartSaver Ticker */}
+      {isGroceries && <PriceTicker />}
+
       {/* Nav */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -54,7 +77,7 @@ const CategoryHome = () => {
         transition={{ duration: 0.7 }}
         className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto relative z-10"
       >
-        <motion.h1 
+        <motion.h1
           className="text-2xl font-extrabold font-heading cursor-pointer text-foreground flex items-center gap-2"
           onClick={() => navigate("/")}
           whileHover={{ scale: 1.05 }}
@@ -80,9 +103,9 @@ const CategoryHome = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.2 }}
-        className={`${cfg.bgClass} py-16 transition-colors duration-500 relative z-10`}
+        className={`${cfg.bgClass} py-12 transition-colors duration-500 relative z-10`}
       >
-        <div className="max-w-3xl mx-auto px-6 text-center space-y-6">
+        <div className="max-w-3xl mx-auto px-6 text-center space-y-4">
           <motion.div
             className="inline-flex items-center gap-3 mb-2"
             initial={{ opacity: 0, y: 15 }}
@@ -91,29 +114,30 @@ const CategoryHome = () => {
           >
             <Sparkles className="h-5 w-5 text-primary animate-twinkle" />
             <span className="text-primary font-semibold text-sm uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
-              {cfg.label} Category
+              {cfg.label.split(' — ')[0]}
             </span>
             <Sparkles className="h-5 w-5 text-primary animate-twinkle" style={{ animationDelay: '1s' }} />
           </motion.div>
-          
-          <motion.span
-            className="text-6xl inline-block"
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.4 }}
-          >
-            {cfg.emoji}
-          </motion.span>
-          
-          <motion.h2
-            className="text-3xl md:text-4xl font-extrabold text-foreground"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            {cfg.label}
-          </motion.h2>
-          
+
+          <div className="flex items-center justify-center gap-4">
+            <motion.span
+              className="text-5xl inline-block"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.4 }}
+            >
+              {cfg.emoji}
+            </motion.span>
+            <motion.h2
+              className="text-3xl font-extrabold text-foreground"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              {cfg.label.split(' — ')[0]}
+            </motion.h2>
+          </div>
+
           <motion.p
             className="text-muted-foreground text-lg max-w-xl mx-auto"
             initial={{ opacity: 0, y: 15 }}
@@ -132,7 +156,7 @@ const CategoryHome = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="bg-card rounded-2xl shadow-xl border border-border p-8 space-y-5 backdrop-blur-sm bg-white/70">
+        <div className="bg-card rounded-2xl shadow-xl border border-border p-6 sm:p-8 space-y-5 backdrop-blur-sm bg-white/70">
           {isTransport ? (
             <div className="space-y-4">
               <div className="relative group">
@@ -146,14 +170,14 @@ const CategoryHome = () => {
               </div>
               <div className="relative group">
                 <MapPin className="absolute left-4 top-4 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-pink-500" />
-                <Input 
-                  placeholder="To — Enter destination" 
-                  className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300" 
+                <Input
+                  placeholder="To — Enter destination"
+                  className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
                 />
               </div>
-              <Button 
+              <Button
                 className="w-full h-14 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-purple-500 hover:from-pink-500 hover:to-purple-600"
-                onClick={handleSearch} 
+                onClick={handleSearch}
                 disabled={isSearching}
               >
                 {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : "Compare Fares"}
@@ -161,7 +185,7 @@ const CategoryHome = () => {
             </div>
           ) : (
             <>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <div className="relative flex-1 group">
                   <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-pink-500" />
                   <Input
@@ -172,12 +196,12 @@ const CategoryHome = () => {
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   />
                 </div>
-                <Button 
+                <Button
                   className="h-14 px-8 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-purple-500 hover:from-pink-500 hover:to-purple-600"
-                  onClick={handleSearch} 
+                  onClick={handleSearch}
                   disabled={isSearching}
                 >
-                  {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : "Search"}
+                  {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : "Search Now"}
                 </Button>
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground bg-accent/30 rounded-xl p-4">
@@ -237,15 +261,44 @@ const CategoryHome = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-foreground mb-2">
-                  Results for "{searchVal || cfg.mockQuery}"
-                </h3>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Sparkles className="h-4 w-4 text-primary animate-twinkle" />
-                  <span>Found {cfg.mockResults.length} options for you</span>
+              <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-2xl font-bold text-foreground mb-1">
+                    Results for "{searchVal || cfg.mockQuery}"
+                  </h3>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Sparkles className="h-4 w-4 text-primary animate-twinkle" />
+                    <span>Found {cfg.mockResults.length} options for you</span>
+                  </div>
                 </div>
+                {cfg.subcategories && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setSearchVal("");
+                      setShowResults(false);
+                      setSearchParams({});
+                    }}
+                    className="text-primary hover:text-primary hover:bg-primary/10 rounded-full gap-2 font-bold"
+                  >
+                    Back to Browse
+                  </Button>
+                )}
               </div>
+
+              {/* SmartSaver Battle Mode Hero */}
+              {isGroceries && cfg.mockResults.length > 0 && (
+                <ComparisonHero
+                  winner={{
+                    ...cfg.mockResults[0],
+                    rating: Math.floor(cfg.mockResults[0].rating),
+                    deliveryTime: parseInt(cfg.mockResults[0].delivery) || 15
+                  }}
+                  onCompare={() => { }}
+                />
+              )}
+
               <ComparisonResults
                 results={cfg.mockResults}
                 query={searchVal || cfg.mockQuery}
@@ -256,26 +309,57 @@ const CategoryHome = () => {
 
           {!showResults && !isSearching && (
             <motion.div
-              key="empty"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="border-2 border-dashed border-border rounded-2xl p-16 text-center bg-gradient-to-br from-pink-50/20 to-purple-50/20 backdrop-blur-sm"
+              key="browse-or-empty"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
             >
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
-                  <Search className="h-8 w-8 text-primary" />
+              {isGroceries && activeSubcategory ? (
+                <CategoryItemList
+                  subcategory={activeSubcategory}
+                  onBack={() => setActiveSubcategory(null)}
+                  onItemClick={(item) => {
+                    setSearchVal(item);
+                    setActiveSubcategory(null);
+                    handleSearch();
+                  }}
+                />
+              ) : isGroceries && cfg.subcategories ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                  {cfg.subcategories.map((sub, i) => (
+                    <Category3DCard
+                      key={sub.id}
+                      index={i}
+                      label={sub.label}
+                      icon={sub.icon}
+                      items={sub.items}
+                      onClick={() => setActiveSubcategory(sub)}
+                    />
+                  ))}
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">
-                    {isTransport ? "Ready to find the best fares?" : "Ready to compare prices?"}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {isTransport
-                      ? "Enter your pickup and destination locations above"
-                      : "Enter a product name or paste a link to get started"}
-                  </p>
+              ) : cfg.subcategories ? (
+                <CategorySubGrid
+                  categoryId={cat}
+                  onSubCategoryClick={(label) => setSearchParams({ q: label })}
+                />
+              ) : (
+                <div className="border-2 border-dashed border-border rounded-2xl p-16 text-center bg-gradient-to-br from-pink-50/20 to-purple-50/20 backdrop-blur-sm">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
+                      <Search className="h-8 w-8 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-foreground mb-2">
+                        {isTransport ? "Ready to find the best fares?" : "Ready to compare prices?"}
+                      </h3>
+                      <p className="text-muted-foreground">
+                        {isTransport
+                          ? "Enter your pickup and destination locations above"
+                          : "Enter a product name or paste a link to get started"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

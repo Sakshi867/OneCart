@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import CategoryHome from "./pages/CategoryHome";
 import NotFound from "./pages/NotFound";
+import { OnboardingExperience } from "./components/OnboardingExperience";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/onboarding" element={<OnboardingExperience />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/category/:id" element={<CategoryHome />} />
             <Route path="*" element={<NotFound />} />
