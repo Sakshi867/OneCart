@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ComparisonResults from "@/components/ComparisonResults";
 import BackButton from "@/components/BackButton";
-import CategorySubGrid from "@/components/CategorySubGrid";
+import ExpandingMorphPanel from "@/components/ExpandingMorphPanel";
 import { PriceTicker, Category3DCard, ComparisonHero } from "@/components/SmartSaverComponents";
 import CategoryItemList from "@/components/CategoryItemList";
 import { type SubCategory } from "@/lib/categories";
@@ -313,7 +313,7 @@ const CategoryHome = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              {isGroceries && activeSubcategory ? (
+              {activeSubcategory ? (
                 <CategoryItemList
                   subcategory={activeSubcategory}
                   onBack={() => setActiveSubcategory(null)}
@@ -323,23 +323,37 @@ const CategoryHome = () => {
                     handleSearch();
                   }}
                 />
-              ) : isGroceries && cfg.subcategories ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                  {cfg.subcategories.map((sub, i) => (
-                    <Category3DCard
-                      key={sub.id}
-                      index={i}
-                      label={sub.label}
-                      icon={sub.icon}
-                      items={sub.items}
-                      onClick={() => setActiveSubcategory(sub)}
-                    />
-                  ))}
-                </div>
               ) : cfg.subcategories ? (
-                <CategorySubGrid
-                  categoryId={cat}
-                  onSubCategoryClick={(label) => setSearchParams({ q: label })}
+                <ExpandingMorphPanel
+                  subcategories={cfg.subcategories}
+                  activeCategory={cfg.label.split(' — ')[0]}
+                  themeClass={cfg.bgClass}
+                  onSubcategorySelect={(sub) => {
+                    // When a subcategory is selected from the morph panel, it could be either:
+                    // 1. The subcategory header was clicked (should show item list if items exist)
+                    // 2. An item within the expanded panel was clicked (should start search)
+                    
+                    // If this subcategory has items and the user clicked on the header to expand,
+                    // we show the item list. This happens when the subcategory has items but 
+                    // no specific item was selected yet.
+                    if (sub.items && sub.items.length > 0) {
+                      // Check if this is a click on the header vs an item click
+                      // We can differentiate by checking if the label matches one of the items
+                      // If the label is one of the items, then it's an item click and should search
+                      if (sub.items.includes(sub.label)) {
+                        // This is an item click from the expanded panel
+                        setSearchVal(sub.label);
+                        handleSearch();
+                      } else {
+                        // This is a header click, show the item list
+                        setActiveSubcategory(sub);
+                      }
+                    } else {
+                      // No items, so this is definitely a header click, start search
+                      setSearchVal(sub.label);
+                      handleSearch();
+                    }
+                  }}
                 />
               ) : (
                 <div className="border-2 border-dashed border-border rounded-2xl p-16 text-center bg-gradient-to-br from-pink-50/20 to-purple-50/20 backdrop-blur-sm">
