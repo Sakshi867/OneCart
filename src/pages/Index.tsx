@@ -51,25 +51,39 @@ const Index = () => {
         transition={{ duration: 0.5 }}
         className="flex items-center justify-between px-4 sm:px-6 py-4 max-w-6xl mx-auto"
       >
-        <motion.h1 
+        <motion.h1
           className="text-xl sm:text-2xl font-extrabold font-heading text-foreground tracking-tight"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400 }}
         >
           OneCart<span className="text-primary">+</span>
         </motion.h1>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate("/dashboard")} 
-            className="font-medium text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2"
+        <div className="flex gap-2">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Get Started
-          </Button>
-        </motion.div>
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/onboarding")}
+              className="font-medium text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 bg-gradient-to-r from-cyan-500/10 to-green-500/10 hover:from-cyan-500/20 hover:to-green-500/20"
+            >
+              🎬 View 3D Demo
+            </Button>
+          </motion.div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/dashboard")}
+              className="font-medium text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2"
+            >
+              Get Started
+            </Button>
+          </motion.div>
+        </div>
       </motion.header>
 
       {/* Hero */}
@@ -82,32 +96,32 @@ const Index = () => {
         >
           <motion.div variants={fadeUp} custom={0} className="flex flex-wrap gap-2 sm:gap-3">
             {categories.map((c, index) => (
-              <motion.span 
-                key={c.label} 
+              <motion.span
+                key={c.label}
                 className={`${c.color} px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold flex items-center gap-1.5 sm:gap-2 shadow-sm`}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1, type: "spring", stiffness: 300 }}
                 whileHover={{ scale: 1.05, y: -1 }}
               >
-                <span className="text-sm sm:text-base animate-bounce-gentle">{c.emoji}</span> 
+                <span className="text-sm sm:text-base animate-bounce-gentle">{c.emoji}</span>
                 <span className="truncate max-w-[80px] sm:max-w-none">{c.label}</span>
               </motion.span>
             ))}
           </motion.div>
 
-          <motion.h2 
-            variants={fadeUp} 
-            custom={1} 
+          <motion.h2
+            variants={fadeUp}
+            custom={1}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] text-foreground"
           >
             Compare Smarter,{" "}
             <span className="text-gradient">Spend Better</span>
           </motion.h2>
 
-          <motion.p 
-            variants={fadeUp} 
-            custom={2} 
+          <motion.p
+            variants={fadeUp}
+            custom={2}
             className="text-base sm:text-lg text-muted-foreground max-w-lg leading-relaxed"
           >
             Compare prices and fares across groceries, transport, medicines, cosmetics, and shopping — all in one place. Save time, save money.
@@ -145,8 +159,8 @@ const Index = () => {
 
           <motion.div variants={fadeUp} custom={4} className="flex flex-wrap gap-6 sm:gap-8 pt-4 sm:pt-6 justify-center sm:justify-start">
             {stats.map((s, index) => (
-              <motion.div 
-                key={s.label} 
+              <motion.div
+                key={s.label}
                 className="text-center group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -192,7 +206,7 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <motion.span 
+            <motion.span
               className="text-primary font-semibold text-sm uppercase tracking-widest bg-accent px-3 py-1 sm:px-4 sm:py-1.5 rounded-full inline-block"
               whileHover={{ scale: 1.05 }}
             >
@@ -219,7 +233,7 @@ const Index = () => {
                 whileHover={{ y: -5, scale: 1.02 }}
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl sm:rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <motion.span 
+                <motion.span
                   className="text-4xl sm:text-5xl font-extrabold text-primary/20 group-hover:text-primary/30 transition-colors"
                   whileHover={{ scale: 1.1 }}
                 >
@@ -243,7 +257,7 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <motion.span 
+            <motion.span
               className="text-primary font-semibold text-sm uppercase tracking-widest bg-accent px-3 py-1 sm:px-4 sm:py-1.5 rounded-full inline-block"
               whileHover={{ scale: 1.05 }}
             >
@@ -266,7 +280,7 @@ const Index = () => {
                 whileHover={{ y: -5, scale: 1.02 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl sm:rounded-2xl" />
-                <motion.div 
+                <motion.div
                   className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-4 relative z-10"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
@@ -294,9 +308,9 @@ const Index = () => {
           >
             <div className="absolute top-0 right-0 w-32 sm:w-48 h-32 sm:h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 animate-float" />
             <div className="absolute bottom-0 left-0 w-24 sm:w-32 h-24 sm:h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 animate-bounce-gentle" />
-            
+
             <div className="relative z-10">
-              <motion.h3 
+              <motion.h3
                 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -304,7 +318,7 @@ const Index = () => {
               >
                 Ready to save on every purchase?
               </motion.h3>
-              <motion.p 
+              <motion.p
                 className="text-white/90 text-base sm:text-lg mb-6 sm:mb-8 max-w-xl mx-auto"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -337,13 +351,13 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-8 sm:py-10 border-t border-border bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <motion.h1 
+          <motion.h1
             className="text-lg sm:text-xl font-bold font-heading text-foreground"
             whileHover={{ scale: 1.05 }}
           >
             OneCart<span className="text-primary">+</span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-muted-foreground text-sm text-center sm:text-left"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
