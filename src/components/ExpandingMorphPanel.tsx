@@ -63,55 +63,62 @@ const ExpandingPanelItem = ({
   subcategory, 
   index, 
   themeClass,
-  onSelect 
+  onSelect,
+  onHeaderClick
 }: ExpandingPanelItemProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const Icon = subcategory.icon;
 
-  // Extract theme colors from the theme class
+  // Enhanced theme colors with variations for better visual distinction
   const getThemeColors = () => {
     if (themeClass.includes('theme-groceries')) {
-      return {
-        primary: 'from-green-500/20 to-emerald-500/20',
-        border: 'border-green-200',
-        hoverBorder: 'hover:border-green-300',
-        text: 'text-green-700'
-      };
+      // Green theme variations
+      const variations = [
+        { primary: 'from-green-400/30 to-emerald-400/30', border: 'border-green-200', hoverBorder: 'hover:border-green-300', text: 'text-green-700', bg: 'bg-green-50/50', ring: 'ring-green-200/30' },
+        { primary: 'from-emerald-400/30 to-teal-400/30', border: 'border-emerald-200', hoverBorder: 'hover:border-emerald-300', text: 'text-emerald-700', bg: 'bg-emerald-50/50', ring: 'ring-emerald-200/30' },
+        { primary: 'from-teal-400/30 to-green-400/30', border: 'border-teal-200', hoverBorder: 'hover:border-teal-300', text: 'text-teal-700', bg: 'bg-teal-50/50', ring: 'ring-teal-200/30' }
+      ];
+      return variations[index % variations.length];
     } else if (themeClass.includes('theme-cosmetics')) {
-      return {
-        primary: 'from-pink-500/20 to-rose-500/20',
-        border: 'border-pink-200',
-        hoverBorder: 'hover:border-pink-300',
-        text: 'text-pink-700'
-      };
+      // Pink/Lavender theme variations
+      const variations = [
+        { primary: 'from-pink-400/30 to-rose-400/30', border: 'border-pink-200', hoverBorder: 'hover:border-pink-300', text: 'text-pink-700', bg: 'bg-pink-50/50', ring: 'ring-pink-200/30' },
+        { primary: 'from-rose-400/30 to-pink-400/30', border: 'border-rose-200', hoverBorder: 'hover:border-rose-300', text: 'text-rose-700', bg: 'bg-rose-50/50', ring: 'ring-rose-200/30' },
+        { primary: 'from-fuchsia-400/30 to-pink-400/30', border: 'border-fuchsia-200', hoverBorder: 'hover:border-fuchsia-300', text: 'text-fuchsia-700', bg: 'bg-fuchsia-50/50', ring: 'ring-fuchsia-200/30' }
+      ];
+      return variations[index % variations.length];
     } else if (themeClass.includes('theme-transport')) {
-      return {
-        primary: 'from-blue-500/20 to-sky-500/20',
-        border: 'border-blue-200',
-        hoverBorder: 'hover:border-blue-300',
-        text: 'text-blue-700'
-      };
+      // Blue theme variations
+      const variations = [
+        { primary: 'from-blue-400/30 to-sky-400/30', border: 'border-blue-200', hoverBorder: 'hover:border-blue-300', text: 'text-blue-700', bg: 'bg-blue-50/50', ring: 'ring-blue-200/30' },
+        { primary: 'from-sky-400/30 to-blue-400/30', border: 'border-sky-200', hoverBorder: 'hover:border-sky-300', text: 'text-sky-700', bg: 'bg-sky-50/50', ring: 'ring-sky-200/30' },
+        { primary: 'from-cyan-400/30 to-blue-400/30', border: 'border-cyan-200', hoverBorder: 'hover:border-cyan-300', text: 'text-cyan-700', bg: 'bg-cyan-50/50', ring: 'ring-cyan-200/30' }
+      ];
+      return variations[index % variations.length];
     } else if (themeClass.includes('theme-medicines')) {
-      return {
-        primary: 'from-teal-500/20 to-cyan-500/20',
-        border: 'border-teal-200',
-        hoverBorder: 'hover:border-teal-300',
-        text: 'text-teal-700'
-      };
+      // Teal theme variations
+      const variations = [
+        { primary: 'from-teal-400/30 to-cyan-400/30', border: 'border-teal-200', hoverBorder: 'hover:border-teal-300', text: 'text-teal-700', bg: 'bg-teal-50/50', ring: 'ring-teal-200/30' },
+        { primary: 'from-cyan-400/30 to-teal-400/30', border: 'border-cyan-200', hoverBorder: 'hover:border-cyan-300', text: 'text-cyan-700', bg: 'bg-cyan-50/50', ring: 'ring-cyan-200/30' },
+        { primary: 'from-emerald-400/30 to-teal-400/30', border: 'border-emerald-200', hoverBorder: 'hover:border-emerald-300', text: 'text-emerald-700', bg: 'bg-emerald-50/50', ring: 'ring-emerald-200/30' }
+      ];
+      return variations[index % variations.length];
     } else if (themeClass.includes('theme-shopping')) {
-      return {
-        primary: 'from-orange-500/20 to-amber-500/20',
-        border: 'border-orange-200',
-        hoverBorder: 'hover:border-orange-300',
-        text: 'text-orange-700'
-      };
+      // Orange/Peach theme variations
+      const variations = [
+        { primary: 'from-orange-400/30 to-amber-400/30', border: 'border-orange-200', hoverBorder: 'hover:border-orange-300', text: 'text-orange-700', bg: 'bg-orange-50/50', ring: 'ring-orange-200/30' },
+        { primary: 'from-amber-400/30 to-orange-400/30', border: 'border-amber-200', hoverBorder: 'hover:border-amber-300', text: 'text-amber-700', bg: 'bg-amber-50/50', ring: 'ring-amber-200/30' },
+        { primary: 'from-yellow-400/30 to-orange-400/30', border: 'border-yellow-200', hoverBorder: 'hover:border-yellow-300', text: 'text-yellow-700', bg: 'bg-yellow-50/50', ring: 'ring-yellow-200/30' }
+      ];
+      return variations[index % variations.length];
     }
-    return {
-      primary: 'from-primary/20 to-accent/20',
-      border: 'border-border',
-      hoverBorder: 'hover:border-primary/30',
-      text: 'text-foreground'
-    };
+    
+    // Default variations
+    const variations = [
+      { primary: 'from-primary/30 to-accent/30', border: 'border-border', hoverBorder: 'hover:border-primary/30', text: 'text-foreground', bg: 'bg-accent/20', ring: 'ring-primary/20' },
+      { primary: 'from-accent/30 to-primary/30', border: 'border-border', hoverBorder: 'hover:border-accent/30', text: 'text-foreground', bg: 'bg-primary/10', ring: 'ring-accent/20' }
+    ];
+    return variations[index % variations.length];
   };
 
   const colors = getThemeColors();
@@ -127,10 +134,10 @@ const ExpandingPanelItem = ({
       <motion.div
         className={`
           rounded-2xl p-6 cursor-pointer border-2 transition-all duration-300
-          bg-white/90 backdrop-blur-sm shadow-lg
+          ${colors.bg} backdrop-blur-sm shadow-lg
           ${isExpanded 
-            ? 'shadow-2xl scale-[1.02] border-primary/50' 
-            : `shadow-lg ${colors.border} hover:shadow-xl ${colors.hoverBorder} hover:scale-[1.01]`
+            ? `shadow-2xl scale-[1.02] border-primary/50 ${colors.ring} ring-2` 
+            : `shadow-lg ${colors.border} hover:shadow-xl ${colors.hoverBorder} hover:scale-[1.01] hover:ring-1 hover:${colors.ring}`
           }
         `}
         whileHover={{ y: -3 }}
@@ -142,23 +149,23 @@ const ExpandingPanelItem = ({
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${colors.primary} flex items-center justify-center shadow-md`}>
+            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${colors.primary} flex items-center justify-center shadow-md ring-1 ring-white/20`}>
               <Icon className={`h-7 w-7 ${colors.text}`} />
             </div>
             <div>
               <h4 className="font-bold text-xl text-foreground">{subcategory.label}</h4>
               {subcategory.tag && (
-                <span className={`inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 ${colors.text}`}>
+                <span className={`inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r ${colors.primary} ${colors.text} shadow-sm`}>
                   {subcategory.tag}
                 </span>
               )}
               {subcategory.badgeText && (
-                <span className="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-destructive/10 text-destructive">
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-destructive/20 to-destructive/10 text-destructive shadow-sm">
                   {subcategory.badgeText}
                 </span>
               )}
               {subcategory.highlight && (
-                <span className="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-yellow-400/30 to-amber-400/30 text-yellow-800 shadow-sm">
                   ⭐ Highlight
                 </span>
               )}
@@ -188,7 +195,7 @@ const ExpandingPanelItem = ({
             <motion.div
               initial={{ y: -10 }}
               animate={{ y: 0 }}
-              className="bg-gradient-to-br from-background/80 to-accent/5 rounded-2xl p-6 border border-primary/10 backdrop-blur-sm shadow-inner"
+              className="bg-gradient-to-br from-background/90 to-accent/10 rounded-2xl p-6 border border-primary/10 backdrop-blur-sm shadow-inner ring-1 ring-white/10"
             >
               {/* Items List */}
               {subcategory.items && subcategory.items.length > 0 && (
@@ -202,6 +209,14 @@ const ExpandingPanelItem = ({
                       // Get the appropriate icon for this item if available
                       const ItemIcon = subcategory.itemIcons?.[item] || subcategory.icon;
                       
+                      // Cycle through subtle color variations for items
+                      const itemVariations = [
+                        'hover:bg-primary/10 hover:border-primary/30',
+                        'hover:bg-accent/10 hover:border-accent/30', 
+                        'hover:bg-muted/10 hover:border-muted/30'
+                      ];
+                      const itemVariation = itemVariations[itemIndex % itemVariations.length];
+                      
                       return (
                         <motion.button
                           key={item}
@@ -214,9 +229,9 @@ const ExpandingPanelItem = ({
                             // Directly trigger search for the selected item
                             onSelect({ ...subcategory, label: item });
                           }}
-                          className="text-left p-4 rounded-xl bg-white/60 border border-border hover:border-primary/30 hover:bg-primary/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-3"
+                          className={`text-left p-4 rounded-xl bg-white/70 border border-border ${itemVariation} transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-3`}
                         >
-                          <div className={`p-2 rounded-lg bg-gradient-to-br ${colors.primary}`}>
+                          <div className={`p-2 rounded-lg bg-gradient-to-br ${colors.primary} shadow-inner`}>
                             <ItemIcon className={`h-5 w-5 ${colors.text}`} />
                           </div>
                           <span className="text-base font-medium text-foreground">{item}</span>
@@ -239,15 +254,24 @@ const ExpandingPanelItem = ({
                       // Get the appropriate icon for this option if available
                       const OptionIcon = subcategory.optionIcons?.[option] || subcategory.icon;
                       
+                      // Create unique color variations for each option
+                      const optionColors = [
+                        'bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30',
+                        'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/30 hover:to-cyan-500/30',
+                        'bg-gradient-to-r from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30',
+                        'bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30'
+                      ];
+                      const optionColor = optionColors[optionIndex % optionColors.length];
+                      
                       return (
                         <motion.button
                           key={option}
                           initial={{ opacity: 0, scale: 0.9 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: optionIndex * 0.05 }}
-                          whileHover={{ scale: 1.05 }}
+                          whileHover={{ scale: 1.05, y: -1 }}
                           whileTap={{ scale: 0.95 }}
-                          className={`px-5 py-2.5 rounded-full bg-accent/20 text-accent-foreground hover:bg-accent/30 transition-colors duration-200 text-sm font-medium shadow-sm hover:shadow-md flex items-center gap-2`}
+                          className={`px-5 py-2.5 rounded-full text-accent-foreground transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md flex items-center gap-2 ${optionColor}`}
                         >
                           <OptionIcon className="h-4 w-4" />
                           {option}
