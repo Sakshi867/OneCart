@@ -11,7 +11,9 @@ import BackButton from "@/components/BackButton";
 import ExpandingMorphPanel from "@/components/ExpandingMorphPanel";
 import { PriceTicker, Category3DCard, ComparisonHero } from "@/components/SmartSaverComponents";
 import CategoryItemList from "@/components/CategoryItemList";
-import { type SubCategory } from "@/lib/categories";
+import { type SubCategory, type MockResult } from "@/lib/categories";
+import { useMutation } from "@tanstack/react-query";
+import { compareProducts, compareTransport } from "@/lib/api";
 
 const CategoryHome = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,6 +26,31 @@ const CategoryHome = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [activeSubcategory, setActiveSubcategory] = useState<SubCategory | null>(null);
+  const [searchResults, setSearchResults] = useState<MockResult[] | null>(null);
+  const [pickupVal, setPickupVal] = useState("");
+  const [dropoffVal, setDropoffVal] = useState("");
+
+  const searchMutation = useMutation({
+    mutationFn: async () => {
+      if (isTransport) {
+        return await compareTransport(pickupVal, dropoffVal);
+      } else {
+        return await compareProducts(searchVal);
+      }
+    },
+    onSuccess: (data) => {
+      setSearchResults(data);
+      setIsSearching(false);
+      setShowResults(true);
+    },
+    onError: (error) => {
+      console.error("Search failed:", error);
+      // Fallback to mock data on error for demo purposes
+      setSearchResults(cfg.mockResults);
+      setIsSearching(false);
+      setShowResults(true);
+    }
+  });
 
   useEffect(() => {
     if (cfg) setCategory(cat);
@@ -55,10 +82,7 @@ const CategoryHome = () => {
   const handleSearch = () => {
     setIsSearching(true);
     setShowResults(false);
-    setTimeout(() => {
-      setIsSearching(false);
-      setShowResults(true);
-    }, 1200);
+    searchMutation.mutate();
   };
 
   return (
@@ -164,8 +188,8 @@ const CategoryHome = () => {
                 <Input
                   placeholder="From — Enter pickup location"
                   className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
-                  value={searchVal}
-                  onChange={(e) => setSearchVal(e.target.value)}
+                  value={pickupVal}
+                  onChange={(e) => setPickupVal(e.target.value)}
                 />
               </div>
               <div className="relative group">
@@ -173,6 +197,8 @@ const CategoryHome = () => {
                 <Input
                   placeholder="To — Enter destination"
                   className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
+                  value={dropoffVal}
+                  onChange={(e) => setDropoffVal(e.target.value)}
                 />
               </div>
               <Button
@@ -215,8 +241,13 @@ const CategoryHome = () => {
           {!showResults && !isSearching && (
             <button
               onClick={() => {
-                setSearchVal(cfg.mockQuery);
-                handleSearch();
+                if (isTransport) {
+                  setPickupVal("Connaught Place");
+                  setDropoffVal("IGI Airport");
+                } else {
+                  setSearchVal(cfg.mockQuery);
+                }
+                setTimeout(handleSearch, 100);
               }}
               className="text-xs text-primary hover:underline font-medium"
             >
@@ -264,11 +295,11 @@ const CategoryHome = () => {
               <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-2xl font-bold text-foreground mb-1">
-                    Results for "{searchVal || cfg.mockQuery}"
+                    Results for "{isTransport ? `${pickupVal} to ${dropoffVal}` : searchVal || cfg.mockQuery}"
                   </h3>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Sparkles className="h-4 w-4 text-primary animate-twinkle" />
-                    <span>Found {cfg.mockResults.length} options for you</span>
+                    <span>Found {(searchResults || cfg.mockResults).length} options for you</span>
                   </div>
                 </div>
                 {cfg.subcategories && (
@@ -288,20 +319,20 @@ const CategoryHome = () => {
               </div>
 
               {/* SmartSaver Battle Mode Hero */}
-              {isGroceries && cfg.mockResults.length > 0 && (
+              {isGroceries && (searchResults || cfg.mockResults).length > 0 && (
                 <ComparisonHero
                   winner={{
-                    ...cfg.mockResults[0],
-                    rating: Math.floor(cfg.mockResults[0].rating),
-                    deliveryTime: parseInt(cfg.mockResults[0].delivery) || 15
+                    ...(searchResults || cfg.mockResults)[0],
+                    rating: Math.floor((searchResults || cfg.mockResults)[0].rating),
+                    deliveryTime: parseInt((searchResults || cfg.mockResults)[0].delivery) || 15
                   }}
                   onCompare={() => { }}
                 />
               )}
 
               <ComparisonResults
-                results={cfg.mockResults}
-                query={searchVal || cfg.mockQuery}
+                results={searchResults || cfg.mockResults}
+                query={isTransport ? `${pickupVal} to ${dropoffVal}` : searchVal || cfg.mockQuery}
                 isTransport={isTransport}
               />
             </motion.div>
