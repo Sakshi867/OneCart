@@ -19,8 +19,8 @@ export default async function handler(request: Request) {
     // If no API key, return mock data for demo purposes so it doesn't break
     if (!apiKey || apiKey === 'your_serpapi_key_here') {
       return new Response(JSON.stringify([
-        { platform: "Amazon", price: "₹299", rating: 4.5, delivery: "Tomorrow", badge: "Demo Data (No API Key)" },
-        { platform: "Flipkart", price: "₹315", rating: 4.3, delivery: "2 days" }
+        { platform: "Amazon", price: "₹299", rating: 4.5, delivery: "Tomorrow", badge: "Demo Data (No API Key)", link: `https://www.amazon.in/s?k=${encodeURIComponent(query)}` },
+        { platform: "Flipkart", price: "₹315", rating: 4.3, delivery: "2 days", link: `https://www.flipkart.com/search?q=${encodeURIComponent(query)}` }
       ]), {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -49,7 +49,8 @@ export default async function handler(request: Request) {
       originalPrice: item.extracted_old_price ? `₹${item.extracted_old_price}` : undefined,
       rating: item.rating || 4.0, // Default if not provided
       delivery: item.delivery || "Standard Delivery",
-      badge: item.extracted_price && data.shopping_results[0].extracted_price === item.extracted_price ? "Best Price" : undefined
+      badge: item.extracted_price && data.shopping_results[0].extracted_price === item.extracted_price ? "Best Price" : undefined,
+      link: item.link || `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(query)}`
     }));
 
     return new Response(JSON.stringify(results), {

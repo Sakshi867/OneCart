@@ -326,7 +326,10 @@ const CategoryHome = () => {
                     rating: Math.floor((searchResults || cfg.mockResults)[0].rating),
                     deliveryTime: parseInt((searchResults || cfg.mockResults)[0].delivery) || 15
                   }}
-                  onCompare={() => { }}
+                  onCompare={() => {
+                    const link = (searchResults || cfg.mockResults)[0].link;
+                    if (link) window.open(link, '_blank');
+                  }}
                 />
               )}
 

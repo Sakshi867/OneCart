@@ -28,9 +28,9 @@ export default async function handler(request: Request) {
     // Fallback if no API key is provided
     if (!apiKey || apiKey === 'your_openrouteservice_key_here') {
       return new Response(JSON.stringify([
-        { platform: "Ola (Demo)", price: "₹250", rating: 4.2, delivery: "4 min away", badge: "Cheapest" },
-        { platform: "Uber (Demo)", price: "₹270", rating: 4.5, delivery: "2 min away" },
-        { platform: "Rapido (Demo)", price: "₹180", rating: 4.0, delivery: "6 min away" }
+        { platform: "Ola (Demo)", price: "₹250", rating: 4.2, delivery: "4 min away", badge: "Cheapest", link: "https://book.olacabs.com/" },
+        { platform: "Uber (Demo)", price: "₹270", rating: 4.5, delivery: "2 min away", link: "https://m.uber.com/looking" },
+        { platform: "Rapido (Demo)", price: "₹180", rating: 4.0, delivery: "6 min away", link: "https://www.rapido.bike/" }
       ]), {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -83,20 +83,23 @@ export default async function handler(request: Request) {
         price: `₹${calculateFare(TRANSPORT_CONFIG.mini)}`,
         rating: 4.2,
         delivery: `${Math.floor(Math.random() * 5) + 2} min away`,
-        badge: "Cheapest"
+        badge: "Cheapest",
+        link: "https://book.olacabs.com/"
       },
       {
         platform: "Uber",
         price: `₹${calculateFare(TRANSPORT_CONFIG.sedan)}`,
         rating: 4.5,
         delivery: `${Math.floor(Math.random() * 4) + 1} min away`,
-        badge: "Nearest"
+        badge: "Nearest",
+        link: "https://m.uber.com/looking"
       },
       {
         platform: "Rapido",
         price: `₹${calculateFare(TRANSPORT_CONFIG.bike)}`,
         rating: 4.0,
         delivery: `${Math.floor(Math.random() * 6) + 3} min away`,
+        link: "https://www.rapido.bike/"
       }
     ];
 

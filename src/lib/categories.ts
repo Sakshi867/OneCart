@@ -30,6 +30,7 @@ export interface MockResult {
   rating: number;
   delivery: string;
   badge?: string;
+  link?: string;
 }
 
 export const categoryConfig: Record<Category, {
@@ -56,10 +57,10 @@ export const categoryConfig: Record<Category, {
     iconColorClass: "text-[hsl(var(--cat-groceries))]",
     mockQuery: "Organic Basmati Rice 5kg",
     mockResults: [
-      { platform: "BigBasket", price: "₹425", originalPrice: "₹520", rating: 4.5, delivery: "Today, 6 PM", badge: "Best Price" },
-      { platform: "Blinkit", price: "₹449", rating: 4.3, delivery: "10 mins" },
-      { platform: "Zepto", price: "₹459", originalPrice: "₹500", rating: 4.2, delivery: "8 mins", badge: "Fastest" },
-      { platform: "JioMart", price: "₹470", rating: 4.0, delivery: "Tomorrow" },
+      { platform: "BigBasket", price: "₹425", originalPrice: "₹520", rating: 4.5, delivery: "Today, 6 PM", badge: "Best Price", link: "https://www.bigbasket.com/ps/?q=Organic%20Basmati%20Rice" },
+      { platform: "Blinkit", price: "₹449", rating: 4.3, delivery: "10 mins", link: "https://blinkit.com/s/?q=Basmati%20Rice" },
+      { platform: "Zepto", price: "₹459", originalPrice: "₹500", rating: 4.2, delivery: "8 mins", badge: "Fastest", link: "https://www.zeptonow.com/search?q=Basmati%20Rice" },
+      { platform: "JioMart", price: "₹470", rating: 4.0, delivery: "Tomorrow", link: "https://www.jiomart.com/search/Organic%20Basmati%20Rice" },
     ],
     subcategories: [
       { 
@@ -192,10 +193,10 @@ export const categoryConfig: Record<Category, {
     iconColorClass: "text-[hsl(var(--cat-cosmetics))]",
     mockQuery: "Maybelline Fit Me Foundation",
     mockResults: [
-      { platform: "Nykaa", price: "₹399", originalPrice: "₹550", rating: 4.6, delivery: "2-3 days", badge: "Best Price" },
-      { platform: "Amazon", price: "₹425", rating: 4.4, delivery: "Tomorrow" },
-      { platform: "Flipkart", price: "₹449", originalPrice: "₹550", rating: 4.3, delivery: "2 days" },
-      { platform: "Myntra", price: "₹475", rating: 4.5, delivery: "3-4 days" },
+      { platform: "Nykaa", price: "₹399", originalPrice: "₹550", rating: 4.6, delivery: "2-3 days", badge: "Best Price", link: "https://www.nykaa.com/search/result/?q=Maybelline%20Fit%20Me%20Foundation" },
+      { platform: "Amazon", price: "₹425", rating: 4.4, delivery: "Tomorrow", link: "https://www.amazon.in/s?k=Maybelline+Fit+Me+Foundation" },
+      { platform: "Flipkart", price: "₹449", originalPrice: "₹550", rating: 4.3, delivery: "2 days", link: "https://www.flipkart.com/search?q=Maybelline%20Fit%20Me%20Foundation" },
+      { platform: "Myntra", price: "₹475", rating: 4.5, delivery: "3-4 days", link: "https://www.myntra.com/maybelline-fit-me-foundation" },
     ],
     subcategories: [
       { 
@@ -328,10 +329,10 @@ export const categoryConfig: Record<Category, {
     iconColorClass: "text-[hsl(var(--cat-transport))]",
     mockQuery: "Connaught Place → IGI Airport",
     mockResults: [
-      { platform: "Ola", price: "₹320", rating: 4.2, delivery: "4 min away", badge: "Cheapest" },
-      { platform: "Uber", price: "₹345", rating: 4.5, delivery: "2 min away", badge: "Nearest" },
-      { platform: "Rapido", price: "₹280", rating: 4.0, delivery: "6 min away" },
-      { platform: "InDrive", price: "₹310", rating: 3.9, delivery: "5 min away" },
+      { platform: "Ola", price: "₹320", rating: 4.2, delivery: "4 min away", badge: "Cheapest", link: "https://book.olacabs.com/" },
+      { platform: "Uber", price: "₹345", rating: 4.5, delivery: "2 min away", badge: "Nearest", link: "https://m.uber.com/looking" },
+      { platform: "Rapido", price: "₹280", rating: 4.0, delivery: "6 min away", link: "https://www.rapido.bike/" },
+      { platform: "InDrive", price: "₹310", rating: 3.9, delivery: "5 min away", link: "https://indrive.com/" },
     ],
     subcategories: [
       { 
@@ -419,10 +420,10 @@ export const categoryConfig: Record<Category, {
     iconColorClass: "text-[hsl(var(--cat-medicines))]",
     mockQuery: "Dolo 650mg (Strip of 15)",
     mockResults: [
-      { platform: "PharmEasy", price: "₹28", originalPrice: "₹35", rating: 4.4, delivery: "Tomorrow", badge: "Best Price" },
-      { platform: "1mg", price: "₹30", rating: 4.5, delivery: "Same Day" },
-      { platform: "Netmeds", price: "₹31", originalPrice: "₹35", rating: 4.2, delivery: "2 days" },
-      { platform: "Apollo 24|7", price: "₹33", rating: 4.6, delivery: "Today", badge: "Trusted" },
+      { platform: "PharmEasy", price: "₹28", originalPrice: "₹35", rating: 4.4, delivery: "Tomorrow", badge: "Best Price", link: "https://pharmeasy.in/search/all?name=Dolo%20650" },
+      { platform: "1mg", price: "₹30", rating: 4.5, delivery: "Same Day", link: "https://www.1mg.com/search/all?name=Dolo%20650" },
+      { platform: "Netmeds", price: "₹31", originalPrice: "₹35", rating: 4.2, delivery: "2 days", link: "https://www.netmeds.com/catalogsearch/result/Dolo%20650" },
+      { platform: "Apollo 24|7", price: "₹33", rating: 4.6, delivery: "Today", badge: "Trusted", link: "https://www.apollo247.com/search?q=Dolo%20650" },
     ],
     subcategories: [
       { 
@@ -556,10 +557,10 @@ export const categoryConfig: Record<Category, {
     iconColorClass: "text-[hsl(var(--cat-shopping))]",
     mockQuery: "Sony WH-1000XM5 Headphones",
     mockResults: [
-      { platform: "Amazon", price: "₹22,990", originalPrice: "₹29,990", rating: 4.7, delivery: "Tomorrow", badge: "Best Price" },
-      { platform: "Flipkart", price: "₹23,499", rating: 4.6, delivery: "2 days" },
-      { platform: "Croma", price: "₹24,990", originalPrice: "₹29,990", rating: 4.5, delivery: "3-5 days" },
-      { platform: "Reliance Digital", price: "₹25,490", rating: 4.4, delivery: "4-6 days" },
+      { platform: "Amazon", price: "₹22,990", originalPrice: "₹29,990", rating: 4.7, delivery: "Tomorrow", badge: "Best Price", link: "https://www.amazon.in/s?k=Sony+WH-1000XM5" },
+      { platform: "Flipkart", price: "₹23,499", rating: 4.6, delivery: "2 days", link: "https://www.flipkart.com/search?q=Sony%20WH-1000XM5" },
+      { platform: "Croma", price: "₹24,990", originalPrice: "₹29,990", rating: 4.5, delivery: "3-5 days", link: "https://www.croma.com/searchB?q=Sony%20WH-1000XM5" },
+      { platform: "Reliance Digital", price: "₹25,490", rating: 4.4, delivery: "4-6 days", link: "https://www.reliancedigital.in/search?q=Sony%20WH-1000XM5" },
     ],
     subcategories: [
       { 
