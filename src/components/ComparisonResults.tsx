@@ -80,7 +80,12 @@ const ComparisonResults = ({ results, query, isTransport = false }: ComparisonRe
                   <span className="ml-2 text-sm text-muted-foreground line-through decoration-red-400">{r.originalPrice}</span>
                 )}
               </div>
-              <button className="relative overflow-hidden group px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-95 transition-all duration-300">
+              <button 
+                onClick={() => {
+                  if (r.link) window.open(r.link, '_blank');
+                }}
+                className="relative overflow-hidden group px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-95 transition-all duration-300"
+              >
                 <span className="relative z-10 flex items-center gap-2">
                   {isTransport ? "Book Ride" : "Buy Now"} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </span>
