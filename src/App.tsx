@@ -7,6 +7,7 @@ import { CategoryProvider } from "@/contexts/CategoryContext";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import CategoryHome from "./pages/CategoryHome";
+import BrandSelectionDemo from "./pages/BrandSelectionDemo";
 import NotFound from "./pages/NotFound";
 import { OnboardingExperience } from "./components/OnboardingExperience";
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/onboarding" element={<OnboardingExperience />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/category/:id" element={<CategoryHome />} />
+            <Route path="/brand-demo" element={<BrandSelectionDemo />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

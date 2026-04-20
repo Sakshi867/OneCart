@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { ArrowLeft, TrendingUp, TrendingDown, ChevronRight, Search } from "lucide-react";
 import { SubCategory } from "@/lib/categories";
@@ -63,7 +64,7 @@ const CategoryItemList = ({ subcategory, onItemClick, onBack }: CategoryItemList
                     ];
                     const bgVariation = bgVariations[index % bgVariations.length];
                     const borderVariation = borderVariations[index % borderVariations.length];
-                    
+
                     return (
                         <motion.div
                             key={item}
@@ -110,5 +111,6 @@ const CategoryItemList = ({ subcategory, onItemClick, onBack }: CategoryItemList
         </div>
     );
 };
+
 
 export default CategoryItemList;
