@@ -373,27 +373,31 @@ const CategoryHome = () => {
               animate={{ opacity: 1, y: 0 }}
             >
               {activeItemForBrand ? (
-                <BrandSelectionStep
-                  itemLabel={activeItemForBrand}
-                  brands={getBrandsForItem(activeItemForBrand)}
-                  onSelect={(brand) => {
-                    const finalQuery = brand ? `${brand} ${activeItemForBrand}` : activeItemForBrand;
-                    setSearchVal(finalQuery);
-                    setActiveItemForBrand(null);
-                    setActiveSubcategory(null); // Clear item list too so Back to Browse works properly
-                    // Use a timeout to ensure state is set before search mutation fires
-                    setTimeout(() => searchMutation.mutate(), 0);
-                  }}
-                  onBack={() => setActiveItemForBrand(null)}
-                />
+                <div className={cfg.bgClass.split(' ')[1] || ""}>
+                  <BrandSelectionStep
+                    itemLabel={activeItemForBrand}
+                    brands={getBrandsForItem(activeItemForBrand)}
+                    onSelect={(brand) => {
+                      const finalQuery = brand ? `${brand} ${activeItemForBrand}` : activeItemForBrand;
+                      setSearchVal(finalQuery);
+                      setActiveItemForBrand(null);
+                      setActiveSubcategory(null); // Clear item list too so Back to Browse works properly
+                      // Use a timeout to ensure state is set before search mutation fires
+                      setTimeout(() => searchMutation.mutate(), 0);
+                    }}
+                    onBack={() => setActiveItemForBrand(null)}
+                  />
+                </div>
               ) : activeSubcategory ? (
-                <CategoryItemList
-                  subcategory={activeSubcategory}
-                  onBack={() => setActiveSubcategory(null)}
-                  onItemClick={(item) => {
-                    setActiveItemForBrand(item);
-                  }}
-                />
+                <div className={cfg.bgClass.split(' ')[1] || ""}>
+                  <CategoryItemList
+                    subcategory={activeSubcategory}
+                    onBack={() => setActiveSubcategory(null)}
+                    onItemClick={(item) => {
+                      setActiveItemForBrand(item);
+                    }}
+                  />
+                </div>
               ) : cfg.subcategories ? (
                 <ExpandingMorphPanel
                   subcategories={cfg.subcategories}

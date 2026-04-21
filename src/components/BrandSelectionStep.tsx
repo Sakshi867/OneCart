@@ -64,21 +64,21 @@ export const BrandSelectionStep: React.FC<BrandSelectionStepProps> = ({
               onClick={() => onSelect(brand.name)}
               className={cn(
                 "group relative overflow-hidden rounded-2xl p-5 flex flex-col items-center justify-center gap-3",
-                "bg-white border-2 border-border/40 shadow-sm hover:shadow-xl hover:border-primary/50 transition-all cursor-pointer"
+                "bg-card border-2 border-border/50 shadow-sm hover:shadow-xl hover:border-primary/50 transition-all cursor-pointer"
               )}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               
-              <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 shadow-inner text-lg font-bold text-slate-700">
+              <div className="w-14 h-14 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors flex items-center justify-center border border-primary/20 shadow-inner text-xl font-black text-primary">
                 {brand.logo ? (
-                  <span className="text-xl">{brand.logo}</span>
+                  <span className="text-2xl">{brand.logo}</span>
                 ) : (
                   brand.name.substring(0, 2).toUpperCase()
                 )}
               </div>
               
               <div className="text-center">
-                <h3 className="font-bold text-slate-800 text-sm">{brand.name}</h3>
+                <h3 className="font-bold text-foreground text-sm group-hover:text-primary transition-colors">{brand.name}</h3>
                 <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
                   {brand.availablePlatforms} Platforms
                 </span>
@@ -98,14 +98,16 @@ export const BrandSelectionStep: React.FC<BrandSelectionStepProps> = ({
           onClick={() => onSelect("")}
           className={cn(
             "group relative overflow-hidden rounded-2xl p-5 flex flex-col items-center justify-center gap-3",
-            "bg-gradient-to-br from-slate-50 to-slate-100 border-2 border-dashed border-slate-300 shadow-sm hover:shadow-xl hover:border-primary/50 transition-all cursor-pointer"
+            "bg-gradient-to-br from-card to-accent/30 border-2 border-dashed border-border shadow-sm hover:shadow-xl hover:border-primary/50 transition-all cursor-pointer"
           )}
         >
-          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm text-slate-600">
-            <Grid2X2 className="w-6 h-6" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+          <div className="w-14 h-14 rounded-full bg-card group-hover:bg-primary/10 transition-colors flex items-center justify-center border border-border shadow-sm text-foreground group-hover:text-primary">
+            <Grid2X2 className="w-7 h-7" />
           </div>
           <div className="text-center">
-            <h3 className="font-bold text-slate-800 text-sm">Any Brand</h3>
+            <h3 className="font-bold text-foreground text-sm group-hover:text-primary transition-colors">Any Brand</h3>
             <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
               Best Overall
             </span>
