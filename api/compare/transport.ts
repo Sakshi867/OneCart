@@ -28,9 +28,9 @@ export default async function handler(request: Request) {
     // Fallback if no API key is provided
     if (!apiKey || apiKey === 'your_openrouteservice_key_here') {
       return new Response(JSON.stringify([
-        { platform: "Ola (Demo)", price: "₹250", rating: 4.2, delivery: "4 min away", badge: "Cheapest", link: "https://book.olacabs.com/" },
-        { platform: "Uber (Demo)", price: "₹270", rating: 4.5, delivery: "2 min away", link: "https://m.uber.com/looking" },
-        { platform: "Rapido (Demo)", price: "₹180", rating: 4.0, delivery: "6 min away", link: "https://www.rapido.bike/" }
+        { platform: "Ola", price: "Demo Mode (Add API Key)", rating: 4.2, delivery: "4 min away", badge: "Demo Data", link: "https://book.olacabs.com/" },
+        { platform: "Uber", price: "Demo Mode (Add API Key)", rating: 4.5, delivery: "2 min away", link: "https://m.uber.com/looking" },
+        { platform: "Rapido", price: "Demo Mode (Add API Key)", rating: 4.0, delivery: "6 min away", link: "https://www.rapido.bike/" }
       ]), {
         headers: { 'Content-Type': 'application/json' },
       });

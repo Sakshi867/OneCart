@@ -19,8 +19,8 @@ export default async function handler(request: Request) {
     // If no API key, return mock data for demo purposes so it doesn't break
     if (!apiKey || apiKey === 'your_serpapi_key_here') {
       return new Response(JSON.stringify([
-        { platform: "Amazon", price: "₹299", rating: 4.5, delivery: "Tomorrow", badge: "Demo Data (No API Key)", link: `https://www.amazon.in/s?k=${encodeURIComponent(query)}` },
-        { platform: "Flipkart", price: "₹315", rating: 4.3, delivery: "2 days", link: `https://www.flipkart.com/search?q=${encodeURIComponent(query)}` }
+        { platform: "Amazon", price: "Demo Mode (Add API Key)", rating: 4.5, delivery: "Tomorrow", badge: "Demo Data", link: `https://www.amazon.in/s?k=${encodeURIComponent(query)}` },
+        { platform: "Flipkart", price: "Demo Mode (Add API Key)", rating: 4.3, delivery: "2 days", link: `https://www.flipkart.com/search?q=${encodeURIComponent(query)}` }
       ]), {
         headers: { 'Content-Type': 'application/json' },
       });

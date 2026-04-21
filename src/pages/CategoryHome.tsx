@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCategory, type Category } from "@/contexts/CategoryContext";
 import { categoryConfig } from "@/lib/categories";
-import { Search, LayoutGrid, Link2, MapPin, Loader2, Sparkles } from "lucide-react";
+import { Search, LayoutGrid, Link2, MapPin, Loader2, Sparkles, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ComparisonResults from "@/components/ComparisonResults";
-import BackButton from "@/components/BackButton";
 import ExpandingMorphPanel from "@/components/ExpandingMorphPanel";
 import { PriceTicker, Category3DCard, ComparisonHero } from "@/components/SmartSaverComponents";
 import CategoryItemList from "@/components/CategoryItemList";
+import BrandSelectionStep from "@/components/BrandSelectionStep";
 import { type SubCategory, type MockResult } from "@/lib/categories";
+import { getBrandsForItem } from "@/lib/brandData";
 import { useMutation } from "@tanstack/react-query";
 import { compareProducts, compareTransport } from "@/lib/api";
 
@@ -26,6 +27,7 @@ const CategoryHome = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [activeSubcategory, setActiveSubcategory] = useState<SubCategory | null>(null);
+  const [activeItemForBrand, setActiveItemForBrand] = useState<string | null>(null);
   const [searchResults, setSearchResults] = useState<MockResult[] | null>(null);
   const [pickupVal, setPickupVal] = useState("");
   const [dropoffVal, setDropoffVal] = useState("");
@@ -101,15 +103,38 @@ const CategoryHome = () => {
         transition={{ duration: 0.7 }}
         className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto relative z-10"
       >
-        <motion.h1
-          className="text-2xl font-extrabold font-heading cursor-pointer text-foreground flex items-center gap-2"
-          onClick={() => navigate("/")}
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 400 }}
-        >
-          <Sparkles className="h-6 w-6 text-primary animate-twinkle" />
-          OneCart<span className="text-primary animate-twinkle">+</span>
-        </motion.h1>
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => {
+              if (showResults) {
+                setShowResults(false);
+                setSearchVal("");
+                setSearchParams({});
+              } else if (activeItemForBrand) {
+                setActiveItemForBrand(null);
+              } else if (activeSubcategory) {
+                setActiveSubcategory(null);
+              } else {
+                setCategory(null);
+                navigate("/dashboard");
+              }
+            }}
+            className="rounded-full hover:bg-white/50 transition-all duration-300"
+          >
+            <ArrowLeft className="w-6 h-6 text-foreground" />
+          </Button>
+          <motion.h1
+            className="text-2xl font-extrabold font-heading cursor-pointer text-foreground flex items-center gap-2"
+            onClick={() => navigate("/")}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400 }}
+          >
+            <Sparkles className="h-6 w-6 text-primary animate-twinkle" />
+            OneCart<span className="text-primary animate-twinkle">+</span>
+          </motion.h1>
+        </div>
         <Button
           variant="outline"
           onClick={() => {
@@ -347,14 +372,26 @@ const CategoryHome = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              {activeSubcategory ? (
+              {activeItemForBrand ? (
+                <BrandSelectionStep
+                  itemLabel={activeItemForBrand}
+                  brands={getBrandsForItem(activeItemForBrand)}
+                  onSelect={(brand) => {
+                    const finalQuery = brand ? `${brand} ${activeItemForBrand}` : activeItemForBrand;
+                    setSearchVal(finalQuery);
+                    setActiveItemForBrand(null);
+                    setActiveSubcategory(null); // Clear item list too so Back to Browse works properly
+                    // Use a timeout to ensure state is set before search mutation fires
+                    setTimeout(() => searchMutation.mutate(), 0);
+                  }}
+                  onBack={() => setActiveItemForBrand(null)}
+                />
+              ) : activeSubcategory ? (
                 <CategoryItemList
                   subcategory={activeSubcategory}
                   onBack={() => setActiveSubcategory(null)}
                   onItemClick={(item) => {
-                    setSearchVal(item);
-                    setActiveSubcategory(null);
-                    handleSearch();
+                    setActiveItemForBrand(item);
                   }}
                 />
               ) : cfg.subcategories ? (
@@ -363,21 +400,10 @@ const CategoryHome = () => {
                   activeCategory={cfg.label.split(' — ')[0]}
                   themeClass={cfg.bgClass}
                   onSubcategorySelect={(sub) => {
-                    // When a subcategory is selected from the morph panel, it could be either:
-                    // 1. The subcategory header was clicked (should show item list if items exist)
-                    // 2. An item within the expanded panel was clicked (should start search)
-                    
-                    // If this subcategory has items and the user clicked on the header to expand,
-                    // we show the item list. This happens when the subcategory has items but 
-                    // no specific item was selected yet.
                     if (sub.items && sub.items.length > 0) {
-                      // Check if this is a click on the header vs an item click
-                      // We can differentiate by checking if the label matches one of the items
-                      // If the label is one of the items, then it's an item click and should search
                       if (sub.items.includes(sub.label)) {
                         // This is an item click from the expanded panel
-                        setSearchVal(sub.label);
-                        handleSearch();
+                        setActiveItemForBrand(sub.label);
                       } else {
                         // This is a header click, show the item list
                         setActiveSubcategory(sub);
@@ -413,10 +439,6 @@ const CategoryHome = () => {
         </AnimatePresence>
       </section>
 
-      {/* Back Navigation */}
-      <div className="max-w-3xl mx-auto px-6 pb-12 relative z-10">
-        <BackButton variant="dashboard" />
-      </div>
     </div>
   );
 };

@@ -1,184 +1,359 @@
+export interface BrandOption {
+  id: string;
+  name: string;
+  logo?: string;
+  availablePlatforms?: number;
+}
 
-import { Milk, Pill, Smartphone, Shirt, Zap } from "lucide-react";
-import { Brand } from "@/components/BrandSelector";
+// Fallback classifiers for generic items or unmapped ones
+export const fallbackClassifiers: BrandOption[] = [
+  { id: "top-rated", name: "Top Rated", availablePlatforms: 5 },
+  { id: "premium", name: "Premium", availablePlatforms: 3 },
+  { id: "budget", name: "Budget", availablePlatforms: 4 },
+  { id: "organic", name: "Organic/Natural", availablePlatforms: 2 },
+  { id: "new", name: "New Arrivals", availablePlatforms: 3 },
+  { id: "bestseller", name: "Bestseller", availablePlatforms: 6 },
+];
 
-// Helper to get brand list by category ID
-export const getBrandsByCategory = (categoryId: string): Brand[] => {
-    const category = BRAND_CATEGORIES.find(c => c.id === categoryId);
-    if (!category) return [];
-    // Return flattened list of brands from all subcategories provided
-    return category.subcategories.flatMap(s => s.brands).slice(0, 15); // Limit for general view
+export const produceClassifiers: BrandOption[] = [
+  { id: "organic", name: "Organic", availablePlatforms: 3 },
+  { id: "farm-fresh", name: "Farm Fresh", availablePlatforms: 5 },
+  { id: "premium", name: "Premium", availablePlatforms: 2 },
+  { id: "local", name: "Local Sourced", availablePlatforms: 4 },
+  { id: "hydroponic", name: "Hydroponic", availablePlatforms: 2 },
+  { id: "standard", name: "Standard", availablePlatforms: 6 },
+];
+
+export const brandMappings: Record<string, BrandOption[]> = {
+  // --- GROCERIES ---
+  "Onion": produceClassifiers,
+  "Potato": produceClassifiers,
+  "Tomato": produceClassifiers,
+  "Apple": produceClassifiers,
+  "Banana": produceClassifiers,
+  
+  "Milk": [
+    { id: "amul", name: "Amul", availablePlatforms: 6 },
+    { id: "nandini", name: "Nandini", availablePlatforms: 4 },
+    { id: "mother-dairy", name: "Mother Dairy", availablePlatforms: 5 },
+    { id: "mahanand", name: "Mahanand", availablePlatforms: 3 },
+    { id: "govind", name: "Govind", availablePlatforms: 2 },
+    { id: "nestle", name: "Nestle", availablePlatforms: 6 },
+  ],
+  "Curd": [
+    { id: "amul", name: "Amul", availablePlatforms: 6 },
+    { id: "mother-dairy", name: "Mother Dairy", availablePlatforms: 5 },
+    { id: "milky-mist", name: "Milky Mist", availablePlatforms: 4 },
+    { id: "nandini", name: "Nandini", availablePlatforms: 3 },
+    { id: "epigamia", name: "Epigamia", availablePlatforms: 5 },
+    { id: "gowardhan", name: "Gowardhan", availablePlatforms: 3 },
+  ],
+  "Butter": [
+    { id: "amul", name: "Amul", availablePlatforms: 6 },
+    { id: "mother-dairy", name: "Mother Dairy", availablePlatforms: 5 },
+    { id: "nandini", name: "Nandini", availablePlatforms: 4 },
+    { id: "britannia", name: "Britannia", availablePlatforms: 5 },
+    { id: "president", name: "President", availablePlatforms: 4 },
+    { id: "delicious", name: "Delicious", availablePlatforms: 3 },
+  ],
+  "Cheese": [
+    { id: "amul", name: "Amul", availablePlatforms: 6 },
+    { id: "britannia", name: "Britannia", availablePlatforms: 5 },
+    { id: "go-cheese", name: "Go Cheese", availablePlatforms: 4 },
+    { id: "dlecta", name: "D'lecta", availablePlatforms: 3 },
+    { id: "mother-dairy", name: "Mother Dairy", availablePlatforms: 4 },
+    { id: "laughing-cow", name: "Laughing Cow", availablePlatforms: 5 },
+  ],
+  "Paneer": [
+    { id: "amul", name: "Amul", availablePlatforms: 6 },
+    { id: "mother-dairy", name: "Mother Dairy", availablePlatforms: 5 },
+    { id: "milky-mist", name: "Milky Mist", availablePlatforms: 4 },
+    { id: "gowardhan", name: "Gowardhan", availablePlatforms: 4 },
+    { id: "nandini", name: "Nandini", availablePlatforms: 3 },
+    { id: "heritage", name: "Heritage", availablePlatforms: 2 },
+  ],
+  "Eggs": [
+    { id: "upcf", name: "UPCF", availablePlatforms: 3 },
+    { id: "skm", name: "SKM Best", availablePlatforms: 4 },
+    { id: "suguna", name: "Suguna", availablePlatforms: 5 },
+    { id: "ayur", name: "Ayur", availablePlatforms: 2 },
+    { id: "farm-fresh", name: "Farm Fresh", availablePlatforms: 6 },
+    { id: "organic", name: "Organic Eggs", availablePlatforms: 3 },
+  ],
+  "Rice": [
+    { id: "india-gate", name: "India Gate", availablePlatforms: 6 },
+    { id: "daawat", name: "Daawat", availablePlatforms: 6 },
+    { id: "fortune", name: "Fortune", availablePlatforms: 5 },
+    { id: "kohinoor", name: "Kohinoor", availablePlatforms: 5 },
+    { id: "patanjali", name: "Patanjali", availablePlatforms: 4 },
+    { id: "aashirvaad", name: "Aashirvaad", availablePlatforms: 3 },
+  ],
+  "Wheat": [
+    { id: "aashirvaad", name: "Aashirvaad", availablePlatforms: 6 },
+    { id: "pillsbury", name: "Pillsbury", availablePlatforms: 5 },
+    { id: "fortune", name: "Fortune", availablePlatforms: 4 },
+    { id: "patanjali", name: "Patanjali", availablePlatforms: 5 },
+    { id: "shakti-bhog", name: "Shakti Bhog", availablePlatforms: 4 },
+    { id: "organic-tattva", name: "Organic Tattva", availablePlatforms: 3 },
+  ],
+  "Dal": [
+    { id: "tata-sampann", name: "Tata Sampann", availablePlatforms: 6 },
+    { id: "fortune", name: "Fortune", availablePlatforms: 5 },
+    { id: "organic-tattva", name: "Organic Tattva", availablePlatforms: 4 },
+    { id: "pro-nature", name: "Pro Nature", availablePlatforms: 3 },
+    { id: "patanjali", name: "Patanjali", availablePlatforms: 5 },
+    { id: "24-mantra", name: "24 Mantra", availablePlatforms: 4 },
+  ],
+  "Flour": [ // Atta
+    { id: "aashirvaad", name: "Aashirvaad", availablePlatforms: 6 },
+    { id: "pillsbury", name: "Pillsbury", availablePlatforms: 5 },
+    { id: "fortune", name: "Fortune", availablePlatforms: 4 },
+    { id: "patanjali", name: "Patanjali", availablePlatforms: 5 },
+    { id: "shakti-bhog", name: "Shakti Bhog", availablePlatforms: 4 },
+    { id: "nature-fresh", name: "Nature Fresh", availablePlatforms: 3 },
+  ],
+  "Oil": [
+    { id: "fortune", name: "Fortune", availablePlatforms: 6 },
+    { id: "saffola", name: "Saffola", availablePlatforms: 6 },
+    { id: "dhara", name: "Dhara", availablePlatforms: 5 },
+    { id: "sundrop", name: "Sundrop", availablePlatforms: 4 },
+    { id: "gemini", name: "Gemini", availablePlatforms: 4 },
+    { id: "patanjali", name: "Patanjali", availablePlatforms: 5 },
+  ],
+  "Ghee": [
+    { id: "amul", name: "Amul", availablePlatforms: 6 },
+    { id: "mother-dairy", name: "Mother Dairy", availablePlatforms: 5 },
+    { id: "patanjali", name: "Patanjali", availablePlatforms: 6 },
+    { id: "gowardhan", name: "Gowardhan", availablePlatforms: 4 },
+    { id: "nandini", name: "Nandini", availablePlatforms: 3 },
+    { id: "baidyanath", name: "Baidyanath", availablePlatforms: 4 },
+  ],
+  "Spices": [
+    { id: "everest", name: "Everest", availablePlatforms: 6 },
+    { id: "mdh", name: "MDH", availablePlatforms: 6 },
+    { id: "catch", name: "Catch", availablePlatforms: 5 },
+    { id: "tata-sampann", name: "Tata Sampann", availablePlatforms: 5 },
+    { id: "suhana", name: "Suhana", availablePlatforms: 4 },
+    { id: "ramdev", name: "Ramdev", availablePlatforms: 3 },
+  ],
+  "Salt": [
+    { id: "tata", name: "Tata Salt", availablePlatforms: 6 },
+    { id: "aashirvaad", name: "Aashirvaad", availablePlatforms: 5 },
+    { id: "catch", name: "Catch", availablePlatforms: 4 },
+    { id: "puro", name: "Puro", availablePlatforms: 4 },
+    { id: "patanjali", name: "Patanjali", availablePlatforms: 5 },
+    { id: "nirma", name: "Nirma", availablePlatforms: 3 },
+  ],
+  "Sugar": [
+    { id: "mbb", name: "Madhur", availablePlatforms: 6 },
+    { id: "trust", name: "Trust", availablePlatforms: 4 },
+    { id: "parry", name: "Parrys", availablePlatforms: 5 },
+    { id: "uttamas", name: "Uttam", availablePlatforms: 3 },
+    { id: "organic-tattva", name: "Organic Tattva", availablePlatforms: 4 },
+    { id: "dalmia", name: "Dalmia", availablePlatforms: 3 },
+  ],
+  "Chips": [
+    { id: "lays", name: "Lay's", availablePlatforms: 6 },
+    { id: "bingo", name: "Bingo", availablePlatforms: 6 },
+    { id: "doritos", name: "Doritos", availablePlatforms: 5 },
+    { id: "pringles", name: "Pringles", availablePlatforms: 5 },
+    { id: "kurkure", name: "Kurkure", availablePlatforms: 6 },
+    { id: "haldirams", name: "Haldiram's", availablePlatforms: 5 },
+  ],
+  "Biscuits": [
+    { id: "parle-g", name: "Parle-G", availablePlatforms: 6 },
+    { id: "britannia", name: "Britannia", availablePlatforms: 6 },
+    { id: "sunfeast", name: "Sunfeast", availablePlatforms: 5 },
+    { id: "oreo", name: "Oreo", availablePlatforms: 6 },
+    { id: "mcvities", name: "McVitie's", availablePlatforms: 4 },
+    { id: "unibic", name: "Unibic", availablePlatforms: 4 },
+  ],
+  "Juice": [
+    { id: "tropicana", name: "Tropicana", availablePlatforms: 6 },
+    { id: "real", name: "Real", availablePlatforms: 6 },
+    { id: "paper-boat", name: "Paper Boat", availablePlatforms: 5 },
+    { id: "b-natural", name: "B Natural", availablePlatforms: 4 },
+    { id: "minute-maid", name: "Minute Maid", availablePlatforms: 5 },
+    { id: "raw-pressery", name: "Raw Pressery", availablePlatforms: 4 },
+  ],
+  "Soft Drinks": [
+    { id: "coca-cola", name: "Coca-Cola", availablePlatforms: 6 },
+    { id: "pepsi", name: "Pepsi", availablePlatforms: 6 },
+    { id: "sprite", name: "Sprite", availablePlatforms: 6 },
+    { id: "thums-up", name: "Thums Up", availablePlatforms: 6 },
+    { id: "fanta", name: "Fanta", availablePlatforms: 5 },
+    { id: "limca", name: "Limca", availablePlatforms: 4 },
+  ],
+  "Detergent": [
+    { id: "surf-excel", name: "Surf Excel", availablePlatforms: 6 },
+    { id: "tide", name: "Tide", availablePlatforms: 6 },
+    { id: "ariel", name: "Ariel", availablePlatforms: 6 },
+    { id: "rin", name: "Rin", availablePlatforms: 5 },
+    { id: "nirma", name: "Nirma", availablePlatforms: 4 },
+    { id: "wheel", name: "Wheel", availablePlatforms: 5 },
+  ],
+  "Soap": [
+    { id: "dove", name: "Dove", availablePlatforms: 6 },
+    { id: "pears", name: "Pears", availablePlatforms: 5 },
+    { id: "lux", name: "Lux", availablePlatforms: 6 },
+    { id: "dettol", name: "Dettol", availablePlatforms: 6 },
+    { id: "santoor", name: "Santoor", availablePlatforms: 5 },
+    { id: "fiama", name: "Fiama", availablePlatforms: 4 },
+  ],
+  "Floor Cleaner": [
+    { id: "lizol", name: "Lizol", availablePlatforms: 6 },
+    { id: "domex", name: "Domex", availablePlatforms: 5 },
+    { id: "nimyle", name: "Nimyle", availablePlatforms: 4 },
+    { id: "harpic", name: "Harpic", availablePlatforms: 6 },
+    { id: "colin", name: "Colin", availablePlatforms: 5 },
+    { id: "mr-muscle", name: "Mr Muscle", availablePlatforms: 4 },
+  ],
+
+  // --- COSMETICS ---
+  "Face Wash": [
+    { id: "himalaya", name: "Himalaya", availablePlatforms: 6 },
+    { id: "garnier", name: "Garnier", availablePlatforms: 6 },
+    { id: "neutrogena", name: "Neutrogena", availablePlatforms: 5 },
+    { id: "cetaphil", name: "Cetaphil", availablePlatforms: 5 },
+    { id: "clean-clear", name: "Clean & Clear", availablePlatforms: 6 },
+    { id: "plum", name: "Plum", availablePlatforms: 4 },
+  ],
+  "Moisturizer": [
+    { id: "nivea", name: "Nivea", availablePlatforms: 6 },
+    { id: "ponds", name: "Ponds", availablePlatforms: 6 },
+    { id: "clinique", name: "Clinique", availablePlatforms: 4 },
+    { id: "cetaphil", name: "Cetaphil", availablePlatforms: 5 },
+    { id: "olay", name: "Olay", availablePlatforms: 5 },
+    { id: "mamaearth", name: "Mamaearth", availablePlatforms: 5 },
+  ],
+  "Sunscreen": [
+    { id: "lotus", name: "Lotus", availablePlatforms: 6 },
+    { id: "neutrogena", name: "Neutrogena", availablePlatforms: 5 },
+    { id: "minimalist", name: "Minimalist", availablePlatforms: 4 },
+    { id: "aqualogica", name: "Aqualogica", availablePlatforms: 4 },
+    { id: "derma-co", name: "Derma Co", availablePlatforms: 5 },
+    { id: "lakme", name: "Lakme", availablePlatforms: 6 },
+  ],
+  "Serum": [
+    { id: "minimalist", name: "Minimalist", availablePlatforms: 5 },
+    { id: "ordinary", name: "The Ordinary", availablePlatforms: 4 },
+    { id: "garnier", name: "Garnier", availablePlatforms: 6 },
+    { id: "plum", name: "Plum", availablePlatforms: 5 },
+    { id: "mamaearth", name: "Mamaearth", availablePlatforms: 6 },
+    { id: "loreal", name: "L'Oreal", availablePlatforms: 6 },
+  ],
+  "Foundation": [
+    { id: "maybelline", name: "Maybelline", availablePlatforms: 6 },
+    { id: "mac", name: "MAC", availablePlatforms: 4 },
+    { id: "lakme", name: "Lakme", availablePlatforms: 6 },
+    { id: "loreal", name: "L'Oreal", availablePlatforms: 6 },
+    { id: "nykaa", name: "Nykaa", availablePlatforms: 5 },
+    { id: "sugar", name: "SUGAR", availablePlatforms: 5 },
+  ],
+  "Lipstick": [
+    { id: "maybelline", name: "Maybelline", availablePlatforms: 6 },
+    { id: "mac", name: "MAC", availablePlatforms: 4 },
+    { id: "lakme", name: "Lakme", availablePlatforms: 6 },
+    { id: "sugar", name: "SUGAR", availablePlatforms: 5 },
+    { id: "nyx", name: "NYX", availablePlatforms: 4 },
+    { id: "colorbar", name: "Colorbar", availablePlatforms: 5 },
+  ],
+
+  // --- MEDICINES ---
+  "Pain Relief": [
+    { id: "cipla", name: "Cipla", availablePlatforms: 5 },
+    { id: "sunpharma", name: "Sun Pharma", availablePlatforms: 5 },
+    { id: "drreddys", name: "Dr. Reddy's", availablePlatforms: 4 },
+    { id: "mankind", name: "Mankind", availablePlatforms: 4 },
+    { id: "gsk", name: "GSK", availablePlatforms: 5 },
+    { id: "abbott", name: "Abbott", availablePlatforms: 4 },
+  ],
+  "Multivitamins": [
+    { id: "supradyn", name: "Supradyn", availablePlatforms: 5 },
+    { id: "revital", name: "Revital", availablePlatforms: 5 },
+    { id: "zincovit", name: "Zincovit", availablePlatforms: 6 },
+    { id: "becosules", name: "Becosules", availablePlatforms: 5 },
+    { id: "hk-vitals", name: "HK Vitals", availablePlatforms: 4 },
+    { id: "centrum", name: "Centrum", availablePlatforms: 4 },
+  ],
+  "Fever Medicine": [
+    { id: "dolo", name: "Dolo", availablePlatforms: 6 },
+    { id: "calpol", name: "Calpol", availablePlatforms: 6 },
+    { id: "crocin", name: "Crocin", availablePlatforms: 6 },
+    { id: "paracip", name: "Paracip", availablePlatforms: 5 },
+    { id: "sumo", name: "Sumo", availablePlatforms: 4 },
+    { id: "cipla", name: "Cipla", availablePlatforms: 5 },
+  ],
+  "Cough Syrup": [
+    { id: "benadryl", name: "Benadryl", availablePlatforms: 6 },
+    { id: "corex", name: "Corex", availablePlatforms: 5 },
+    { id: "tossex", name: "Tossex", availablePlatforms: 4 },
+    { id: "honitus", name: "Honitus", availablePlatforms: 6 },
+    { id: "koflet", name: "Koflet", availablePlatforms: 5 },
+    { id: "glycodin", name: "Glycodin", availablePlatforms: 4 },
+  ],
+
+  // --- ELECTRONICS ---
+  "Mobile Phones": [
+    { id: "apple", name: "Apple", availablePlatforms: 6 },
+    { id: "samsung", name: "Samsung", availablePlatforms: 6 },
+    { id: "oneplus", name: "OnePlus", availablePlatforms: 5 },
+    { id: "xiaomi", name: "Xiaomi", availablePlatforms: 6 },
+    { id: "vivo", name: "Vivo", availablePlatforms: 5 },
+    { id: "oppo", name: "Oppo", availablePlatforms: 5 },
+  ],
+  "Earphones": [
+    { id: "boat", name: "boAt", availablePlatforms: 6 },
+    { id: "sony", name: "Sony", availablePlatforms: 6 },
+    { id: "apple", name: "Apple", availablePlatforms: 5 },
+    { id: "samsung", name: "Samsung", availablePlatforms: 6 },
+    { id: "jbl", name: "JBL", availablePlatforms: 6 },
+    { id: "noise", name: "Noise", availablePlatforms: 5 },
+  ],
+  "Laptops": [
+    { id: "apple", name: "Apple", availablePlatforms: 5 },
+    { id: "hp", name: "HP", availablePlatforms: 6 },
+    { id: "dell", name: "Dell", availablePlatforms: 6 },
+    { id: "lenovo", name: "Lenovo", availablePlatforms: 6 },
+    { id: "asus", name: "ASUS", availablePlatforms: 6 },
+    { id: "acer", name: "Acer", availablePlatforms: 5 },
+  ],
+  "Smart Watches": [
+    { id: "apple", name: "Apple", availablePlatforms: 5 },
+    { id: "samsung", name: "Samsung", availablePlatforms: 6 },
+    { id: "noise", name: "Noise", availablePlatforms: 6 },
+    { id: "boat", name: "boAt", availablePlatforms: 6 },
+    { id: "fire-boltt", name: "Fire-Boltt", availablePlatforms: 6 },
+    { id: "garmin", name: "Garmin", availablePlatforms: 4 },
+  ],
+
+  // --- CLOTHING ---
+  "T-Shirts": [
+    { id: "puma", name: "Puma", availablePlatforms: 6 },
+    { id: "adidas", name: "Adidas", availablePlatforms: 6 },
+    { id: "levis", name: "Levi's", availablePlatforms: 5 },
+    { id: "u-s-polo", name: "U.S. Polo", availablePlatforms: 5 },
+    { id: "hrx", name: "HRX", availablePlatforms: 4 },
+    { id: "wrogn", name: "WROGN", availablePlatforms: 4 },
+  ],
+  "Jeans": [
+    { id: "levis", name: "Levi's", availablePlatforms: 6 },
+    { id: "pepe-jeans", name: "Pepe Jeans", availablePlatforms: 5 },
+    { id: "wrangler", name: "Wrangler", availablePlatforms: 5 },
+    { id: "lee", name: "Lee", availablePlatforms: 5 },
+    { id: "spykar", name: "Spykar", availablePlatforms: 4 },
+    { id: "flying-machine", name: "Flying Machine", availablePlatforms: 5 },
+  ],
+  "Sneakers": [
+    { id: "nike", name: "Nike", availablePlatforms: 5 },
+    { id: "puma", name: "Puma", availablePlatforms: 6 },
+    { id: "adidas", name: "Adidas", availablePlatforms: 6 },
+    { id: "reebok", name: "Reebok", availablePlatforms: 5 },
+    { id: "skechers", name: "Skechers", availablePlatforms: 5 },
+    { id: "vans", name: "Vans", availablePlatforms: 4 },
+  ]
 };
 
-export const BRAND_CATEGORIES = [
-    {
-        id: "groceries",
-        title: "Groceries",
-        icon: Milk,
-        theme: "groceries" as const,
-        subcategories: [
-            {
-                id: "milk",
-                name: "Dairy > Fresh Milk",
-                brands: [
-                    { id: "amul", name: "Amul", logo: "A", availablePlatforms: 4 },
-                    { id: "nandini", name: "Nandini", logo: "N", availablePlatforms: 3 },
-                    { id: "mahanand", name: "Mahanand", logo: "M", availablePlatforms: 2 },
-                    { id: "motherdairy", name: "Mother Dairy", logo: "MD", availablePlatforms: 5 },
-                    { id: "govind", name: "Govind", logo: "G", availablePlatforms: 2 },
-                    { id: "nestle", name: "Nestle", logo: "N", availablePlatforms: 6 },
-                    { id: "britannia", name: "Britannia", logo: "B", availablePlatforms: 4 },
-                    { id: "gowardhan", name: "Gowardhan", logo: "Go", availablePlatforms: 3 },
-                    { id: "prabhat", name: "Prabhat", logo: "P", availablePlatforms: 2 },
-                    { id: "heritage", name: "Heritage", logo: "H", availablePlatforms: 3 },
-                ]
-            },
-            {
-                id: "oil",
-                name: "Pantry > Cooking Oil",
-                brands: [
-                    { id: "fortune", name: "Fortune", logo: "F", availablePlatforms: 6 },
-                    { id: "saffola", name: "Saffola", logo: "S", availablePlatforms: 5 },
-                    { id: "dhara", name: "Dhara", logo: "D", availablePlatforms: 4 },
-                    { id: "gemini", name: "Gemini", logo: "G", availablePlatforms: 4 },
-                    { id: "sundrop", name: "Sundrop", logo: "Sun", availablePlatforms: 3 },
-                    { id: "dalda", name: "Dalda", logo: "D", availablePlatforms: 3 },
-                    { id: "patanjali", name: "Patanjali", logo: "P", availablePlatforms: 5 },
-                ]
-            },
-            {
-                id: "atta",
-                name: "Pantry > Atta & Flours",
-                brands: [
-                    { id: "aashirvaad", name: "Aashirvaad", logo: "AA", availablePlatforms: 8 },
-                    { id: "pillsbury", name: "Pillsbury", logo: "Pb", availablePlatforms: 5 },
-                    { id: "annapurna", name: "Annapurna", logo: "An", availablePlatforms: 3 },
-                    { id: "shakti-bhog", name: "Shakti Bhog", logo: "SB", availablePlatforms: 2 },
-                    { id: "nature-fresh", name: "Nature Fresh", logo: "NF", availablePlatforms: 4 },
-                    { id: "organic-tattva", name: "Organic Tattva", logo: "OT", availablePlatforms: 3 },
-                ]
-            }
-        ]
-    },
-    {
-        id: "medicines",
-        title: "Medicines",
-        icon: Pill,
-        theme: "medicines" as const,
-        subcategories: [
-            {
-                id: "pain-relief",
-                name: "Pain Relief > Paracetamol",
-                brands: [
-                    { id: "cipla", name: "Cipla", logo: "C", availablePlatforms: 8 },
-                    { id: "sunpharma", name: "Sun Pharma", logo: "SP", availablePlatforms: 6 },
-                    { id: "drreddys", name: "Dr. Reddy's", logo: "DR", availablePlatforms: 5 },
-                    { id: "mankind", name: "Mankind", logo: "M", availablePlatforms: 7 },
-                    { id: "lupin", name: "Lupin", logo: "L", availablePlatforms: 4 },
-                    { id: "gsk", name: "GSK", logo: "GSK", availablePlatforms: 6 },
-                    { id: "abbott", name: "Abbott", logo: "Ab", availablePlatforms: 5 },
-                ]
-            },
-            {
-                id: "supplements",
-                name: "Wellness > Mulitvitamins",
-                brands: [
-                    { id: "hk-vitals", name: "HK Vitals", logo: "HK", availablePlatforms: 4 },
-                    { id: "revital", name: "Revital", logo: "R", availablePlatforms: 6 },
-                    { id: "becosules", name: "Becosules", logo: "B", availablePlatforms: 5 },
-                    { id: "supradyn", name: "Supradyn", logo: "S", availablePlatforms: 5 },
-                    { id: "neurobion", name: "Neurobion", logo: "N", availablePlatforms: 4 },
-                    { id: "zincovit", name: "Zincovit", logo: "Z", availablePlatforms: 6 },
-                ]
-            }
-        ]
-    },
-    {
-        id: "electronics",
-        title: "Electronics",
-        icon: Smartphone,
-        theme: "electronics" as const,
-        subcategories: [
-            {
-                id: "smartphones",
-                name: "Mobiles > Premium Smartphones",
-                brands: [
-                    { id: "apple", name: "Apple", logo: "Ap", availablePlatforms: 8 },
-                    { id: "samsung", name: "Samsung", logo: "Sam", availablePlatforms: 10 },
-                    { id: "google", name: "Google", logo: "G", availablePlatforms: 6 },
-                    { id: "oneplus", name: "OnePlus", logo: "1+", availablePlatforms: 7 },
-                    { id: "xiaomi", name: "Xiaomi", logo: "mi", availablePlatforms: 8 },
-                    { id: "nothing", name: "Nothing", logo: "N", availablePlatforms: 5 },
-                    { id: "motorola", name: "Motorola", logo: "M", availablePlatforms: 6 },
-                ]
-            },
-            {
-                id: "laptops",
-                name: "Computers > Laptops",
-                brands: [
-                    { id: "dell", name: "Dell", logo: "D", availablePlatforms: 9 },
-                    { id: "hp", name: "HP", logo: "HP", availablePlatforms: 10 },
-                    { id: "lenovo", name: "Lenovo", logo: "L", availablePlatforms: 8 },
-                    { id: "asus", name: "Asus", logo: "A", availablePlatforms: 7 },
-                    { id: "acer", name: "Acer", logo: "Ac", availablePlatforms: 6 },
-                    { id: "msi", name: "MSI", logo: "MSI", availablePlatforms: 4 },
-                    { id: "razer", name: "Razer", logo: "R", availablePlatforms: 3 },
-                ]
-            }
-        ]
-    },
-    {
-        id: "shopping",
-        title: "Fashion",
-        icon: Shirt,
-        theme: "cosmetics" as const, // Using cosmetics theme for fashion/shopping
-        subcategories: [
-            {
-                id: "sportswear",
-                name: "Men > Sportswear",
-                brands: [
-                    { id: "nike", name: "Nike", logo: "Ni", availablePlatforms: 5 },
-                    { id: "adidas", name: "Adidas", logo: "Ad", availablePlatforms: 6 },
-                    { id: "puma", name: "Puma", logo: "P", availablePlatforms: 7 },
-                    { id: "reebok", name: "Reebok", logo: "R", availablePlatforms: 4 },
-                    { id: "underarmour", name: "Under Armour", logo: "UA", availablePlatforms: 3 },
-                    { id: "asics", name: "Asics", logo: "As", availablePlatforms: 3 },
-                    { id: "hrx", name: "HRX", logo: "H", availablePlatforms: 5 },
-                ]
-            },
-            {
-                id: "sneakers",
-                name: "Footwear > Sneakers",
-                brands: [
-                    { id: "nike-shoes", name: "Nike", logo: "Ni", availablePlatforms: 5 },
-                    { id: "jordan", name: "Jordan", logo: "J", availablePlatforms: 4 },
-                    { id: "adidas-org", name: "Adidas Originals", logo: "AO", availablePlatforms: 5 },
-                    { id: "new-balance", name: "New Balance", logo: "NB", availablePlatforms: 3 },
-                    { id: "vans", name: "Vans", logo: "V", availablePlatforms: 4 },
-                    { id: "converse", name: "Converse", logo: "C", availablePlatforms: 5 },
-                ]
-            }
-        ]
-    },
-    {
-        id: "appliances",
-        title: "Appliances",
-        icon: Zap,
-        theme: "electronics" as const,
-        subcategories: [
-            {
-                id: "ac",
-                name: "Home > Air Conditioners",
-                brands: [
-                    { id: "voltas", name: "Voltas", logo: "V", availablePlatforms: 6 },
-                    { id: "lg", name: "LG", logo: "LG", availablePlatforms: 7 },
-                    { id: "samsung-ac", name: "Samsung", logo: "S", availablePlatforms: 6 },
-                    { id: "daikin", name: "Daikin", logo: "D", availablePlatforms: 5 },
-                    { id: "blue-star", name: "Blue Star", logo: "BS", availablePlatforms: 4 },
-                    { id: "panasonic", name: "Panasonic", logo: "P", availablePlatforms: 5 },
-                    { id: "hitachi", name: "Hitachi", logo: "H", availablePlatforms: 4 },
-                ]
-            }
-        ]
-    }
-];
+export const getBrandsForItem = (item: string): BrandOption[] => {
+  return brandMappings[item] || fallbackClassifiers;
+};
