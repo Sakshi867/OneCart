@@ -3,10 +3,18 @@ import {
   Droplets, Coffee, Eraser, Heart, Scissors, User, Wind, Pencil,
   Shirt, Smartphone, Home, Footprints, Trophy, Book, Palette,
   Briefcase, HelpCircle, Bike, Zap, Users, Map, Clock,
-  RefreshCw, HeartPulse, Activity, PlusSquare, Baby, ShieldCheck,
-  Leaf, Carrot, Wheat, Package, Brush, Navigation, Share2, 
-  Calendar, CreditCard, Syringe, Stethoscope, Thermometer, 
-  Bandage, Gamepad, PenTool
+  RefreshCw, HeartPulse, Activity, PlusSquare, ShieldCheck,
+  Leaf, Carrot, Wheat, Package, Brush, Navigation, Share2,
+  Calendar, CreditCard, Syringe, Stethoscope, Thermometer,
+  Bandage, Gamepad, PenTool, Bus, Train, Plane,
+  UtensilsCrossed, Fish, Egg, Cookie, Candy, IceCream,
+  Soup, Beer, Wine, GlassWater, Sandwich, Pizza, Salad,
+  SprayCan, Bath, Wand2, Gem, Flower2, Citrus,
+  Banana, Cherry, Grape, Drumstick, Beef, Croissant, Cake,
+  Train as TrainIcon, Bus as BusIcon, Car as CarIcon, Bike as BikeIcon,
+  Snowflake, Crown, Tag, DollarSign, Star, Bolt, Armchair,
+  Lock, Coins, Percent, Flame, Award, Clock as ClockIcon,
+  FileText, Siren, Baby, Wind as WindIcon
 } from "lucide-react";
 import type { Category } from "@/contexts/CategoryContext";
 
@@ -14,6 +22,7 @@ export interface SubCategory {
   id: string;
   label: string;
   icon: typeof ShoppingCart;
+  emoji?: string; // Emoji symbol for display
   tag?: string; // e.g., "Cheapest", "Fastest", "Eco"
   badgeText?: string; // e.g., "Prescription Required"
   options?: string[]; // For bottom sheet / modal options
@@ -66,118 +75,126 @@ export const categoryConfig: Record<Category, {
       { 
         id: "fruits-veggies", 
         label: "Fruits & Vegetables", 
+        emoji: "🥗",
         icon: Apple, 
         items: ["Onion", "Potato", "Tomato", "Apple", "Banana"],
         itemIcons: {
-          "Onion": Package,
-          "Potato": Package,
-          "Tomato": Package,
+          "Onion": Sprout,
+          "Potato": Sprout,
+          "Tomato": Citrus,
           "Apple": Apple,
-          "Banana": Leaf
+          "Banana": Banana
         },
-        options: ["Organic", "Local Farms", "Seasonal", "Bulk Discounts"],
+        options: ["Organic", "Fresh", "Frozen", "Budget", "Premium", "Bulk"],
         optionIcons: {
           "Organic": Leaf,
-          "Local Farms": Home,
-          "Seasonal": Calendar,
-          "Bulk Discounts": ShoppingCart
+          "Fresh": Star,
+          "Frozen": Snowflake,
+          "Budget": DollarSign,
+          "Premium": Crown,
+          "Bulk": Package
         }
       },
       { 
         id: "dairy-eggs", 
         label: "Dairy & Eggs", 
+        emoji: "🥛",
         icon: Milk, 
         items: ["Milk", "Curd", "Butter", "Cheese", "Paneer", "Eggs"],
         itemIcons: {
-          "Milk": Droplets,
+          "Milk": Milk,
           "Curd": Package,
           "Butter": Package,
           "Cheese": Package,
           "Paneer": Package,
-          "Eggs": Package
+          "Eggs": Egg
         },
-        options: ["Organic Dairy", "Gluten-Free", "Artisanal", "Same-Day Delivery"],
+        options: ["Organic", "Fresh", "Premium", "Budget"],
         optionIcons: {
-          "Organic Dairy": Leaf,
-          "Gluten-Free": Eraser,
-          "Artisanal": Brush,
-          "Same-Day Delivery": Clock
+          "Organic": Leaf,
+          "Fresh": Star,
+          "Premium": Crown,
+          "Budget": DollarSign
         }
       },
       { 
         id: "staples-grains", 
         label: "Staples & Grains", 
+        emoji: "🌾",
         icon: Sprout, 
         items: ["Rice", "Wheat", "Dal", "Flour"],
         itemIcons: {
           "Rice": Wheat,
           "Wheat": Wheat,
-          "Dal": Package,
+          "Dal": Sprout,
           "Flour": Wheat
         },
-        options: ["Organic", "Fortified", "Premium Quality", "Value Packs"],
+        options: ["Organic", "Premium", "Bulk", "Budget"],
         optionIcons: {
           "Organic": Leaf,
-          "Fortified": ShieldCheck,
-          "Premium Quality": Trophy,
-          "Value Packs": ShoppingCart
+          "Premium": Crown,
+          "Bulk": Package,
+          "Budget": DollarSign
         }
       },
       { 
         id: "cooking-essentials", 
         label: "Cooking Essentials", 
-        icon: Droplets, 
+        emoji: "🍳",
+        icon: UtensilsCrossed, 
         items: ["Oil", "Ghee", "Spices", "Salt", "Sugar"],
         itemIcons: {
           "Oil": Droplets,
           "Ghee": Package,
           "Spices": Package,
           "Salt": Package,
-          "Sugar": Package
+          "Sugar": Candy
         },
-        options: ["Cold Pressed", "Natural", "Premium Blends", "Bulk"],
+        options: ["Premium", "Organic", "Bulk", "Budget"],
         optionIcons: {
-          "Cold Pressed": Droplets,
-          "Natural": Leaf,
-          "Premium Blends": Trophy,
-          "Bulk": ShoppingCart
+          "Premium": Crown,
+          "Organic": Leaf,
+          "Bulk": Package,
+          "Budget": DollarSign
         }
       },
       { 
         id: "snacks-beverages", 
         label: "Snacks & Beverages", 
+        emoji: "🥤",
         icon: Coffee, 
         items: ["Chips", "Biscuits", "Juice", "Soft Drinks"],
         itemIcons: {
-          "Chips": Package,
-          "Biscuits": Package,
-          "Juice": Droplets,
-          "Soft Drinks": Droplets
+          "Chips": Cookie,
+          "Biscuits": Cookie,
+          "Juice": GlassWater,
+          "Soft Drinks": GlassWater
         },
-        options: ["Healthy", "Gourmet", "International", "Bulk Packs"],
+        options: ["Fresh", "Premium", "Budget", "Bulk"],
         optionIcons: {
-          "Healthy": Heart,
-          "Gourmet": Trophy,
-          "International": Map,
-          "Bulk Packs": ShoppingCart
+          "Fresh": Star,
+          "Premium": Crown,
+          "Budget": DollarSign,
+          "Bulk": Package
         }
       },
       { 
         id: "household-cleaning", 
         label: "Household & Cleaning", 
-        icon: Eraser, 
+        emoji: "🧽",
+        icon: SprayCan, 
         items: ["Detergent", "Soap", "Floor Cleaner"],
         itemIcons: {
-          "Detergent": Package,
-          "Soap": Package,
-          "Floor Cleaner": Package
+          "Detergent": SprayCan,
+          "Soap": Bath,
+          "Floor Cleaner": SprayCan
         },
-        options: ["Eco-Friendly", "Antibacterial", "Fragrance-Free", "Concentrated"],
+        options: ["Organic", "Premium", "Budget", "Bulk"],
         optionIcons: {
-          "Eco-Friendly": Leaf,
-          "Antibacterial": ShieldCheck,
-          "Fragrance-Free": Eraser,
-          "Concentrated": Droplets
+          "Organic": Leaf,
+          "Premium": Crown,
+          "Budget": DollarSign,
+          "Bulk": Package
         }
       },
     ],
@@ -202,104 +219,110 @@ export const categoryConfig: Record<Category, {
       { 
         id: "skincare", 
         label: "Skincare", 
+        emoji: "🧴",
         icon: Heart, 
         items: ["Face Wash", "Moisturizer", "Sunscreen", "Serum", "Face Mask"],
         itemIcons: {
           "Face Wash": Droplets,
-          "Moisturizer": Package,
+          "Moisturizer": Droplets,
           "Sunscreen": ShieldCheck,
-          "Serum": Package,
+          "Serum": Droplets,
           "Face Mask": Package
         },
-        options: ["Organic", "Dermatologist Tested", "Vegan", "Hypoallergenic"],
+        options: ["Natural", "Luxury", "Sensitive", "Vegan", "Dermatology"],
         optionIcons: {
-          "Organic": Leaf,
-          "Dermatologist Tested": ShieldCheck,
+          "Natural": Leaf,
+          "Luxury": Gem,
+          "Sensitive": ShieldCheck,
           "Vegan": Leaf,
-          "Hypoallergenic": Heart
+          "Dermatology": PlusSquare
         }
       },
       { 
         id: "makeup", 
         label: "Makeup", 
+        emoji: "💄",
         icon: Palette, 
         items: ["Foundation", "Lipstick", "Mascara", "Eyeliner", "Compact"],
         itemIcons: {
           "Foundation": Package,
-          "Lipstick": Package,
-          "Mascara": Package,
-          "Eyeliner": Package,
+          "Lipstick": Wand2,
+          "Mascara": Wand2,
+          "Eyeliner": Pencil,
           "Compact": Package
         },
-        options: ["Long-wear", "Waterproof", "Matte Finish", "Buildable Coverage"],
+        options: ["Trending", "New", "Best Sellers", "Luxury"],
         optionIcons: {
-          "Long-wear": Clock,
-          "Waterproof": Droplets,
-          "Matte Finish": Package,
-          "Buildable Coverage": PlusSquare
+          "Trending": Flame,
+          "New": Star,
+          "Best Sellers": Award,
+          "Luxury": Gem
         }
       },
       { 
         id: "haircare", 
         label: "Haircare", 
+        emoji: "💇‍♀️",
         icon: Scissors, 
         items: ["Shampoo", "Conditioner", "Hair Oil", "Hair Serum", "Hair Mask"],
         itemIcons: {
           "Shampoo": Droplets,
-          "Conditioner": Package,
+          "Conditioner": Droplets,
           "Hair Oil": Droplets,
-          "Hair Serum": Package,
-          "Hair Mask": Package
+          "Hair Serum": Droplets,
+          "Hair Mask": Droplets
         },
-        options: ["Sulfate-Free", "Paraben-Free", "Color Safe", "For All Hair Types"],
+        options: ["Natural", "Premium", "Sensitive", "Vegan"],
         optionIcons: {
-          "Sulfate-Free": Eraser,
-          "Paraben-Free": Eraser,
-          "Color Safe": Palette,
-          "For All Hair Types": Users
+          "Natural": Leaf,
+          "Premium": Crown,
+          "Sensitive": ShieldCheck,
+          "Vegan": Leaf
         }
       },
       { 
         id: "personal-care", 
         label: "Personal Care", 
+        emoji: "🧼",
         icon: User, 
         items: ["Body Lotion", "Deodorant", "Body Wash", "Hand Cream"],
         itemIcons: {
-          "Body Lotion": Package,
-          "Deodorant": Package,
+          "Body Lotion": Droplets,
+          "Deodorant": SprayCan,
           "Body Wash": Droplets,
-          "Hand Cream": Package
+          "Hand Cream": Droplets
         },
-        options: ["Natural Ingredients", "Fragrance-Free", "Sensitive Skin", "Luxury"],
+        options: ["Natural", "Luxury", "Sensitive", "Vegan"],
         optionIcons: {
-          "Natural Ingredients": Leaf,
-          "Fragrance-Free": Eraser,
-          "Sensitive Skin": Heart,
-          "Luxury": Trophy
+          "Natural": Leaf,
+          "Luxury": Gem,
+          "Sensitive": ShieldCheck,
+          "Vegan": Leaf
         }
       },
       { 
         id: "fragrances", 
         label: "Fragrances", 
+        emoji: "🌸",
         icon: Wind, 
         items: ["Perfume", "Body Mist", "Eau de Toilette", "Cologne"],
         itemIcons: {
-          "Perfume": Package,
-          "Body Mist": Droplets,
-          "Eau de Toilette": Package,
-          "Cologne": Package
+          "Perfume": SprayCan,
+          "Body Mist": SprayCan,
+          "Eau de Toilette": SprayCan,
+          "Cologne": SprayCan
         },
-        options: ["Long-lasting", "Unisex", "Natural Ingredients", "Luxury"],
+        options: ["Luxury", "Natural", "Long-lasting"],
         optionIcons: {
-          "Long-lasting": Clock,
-          "Unisex": Users,
-          "Natural Ingredients": Leaf,
-          "Luxury": Trophy
+          "Luxury": Gem,
+          "Natural": Leaf,
+          "Long-lasting": ClockIcon
         }
       },
       { 
         id: "beauty-tools", 
         label: "Beauty Tools & Accessories", 
+        emoji: "🪮",
         icon: Pencil, 
         items: ["Makeup Brushes", "Sponges", "Tweezers", "Eyelash Curler"],
         itemIcons: {
@@ -308,12 +331,11 @@ export const categoryConfig: Record<Category, {
           "Tweezers": Package,
           "Eyelash Curler": Package
         },
-        options: ["Professional Grade", "Synthetic", "Cruelty-Free", "Travel Size"],
+        options: ["Premium", "Natural", "Sensitive"],
         optionIcons: {
-          "Professional Grade": Trophy,
-          "Synthetic": Package,
-          "Cruelty-Free": Heart,
-          "Travel Size": Package
+          "Premium": Crown,
+          "Natural": Leaf,
+          "Sensitive": ShieldCheck
         }
       },
     ],
@@ -338,73 +360,91 @@ export const categoryConfig: Record<Category, {
       { 
         id: "bike", 
         label: "Bike Rides", 
-        icon: Bike, 
+        emoji: "🏍️",
+        icon: BikeIcon, 
         tag: "Fastest",
-        options: ["Quick Ride", "Delivery", "Inter-city"],
+        options: ["Fast", "Cheap", "Shared", "Private"],
         optionIcons: {
-          "Quick Ride": Clock,
-          "Delivery": Package,
-          "Inter-city": Map
+          "Fast": Bolt,
+          "Cheap": Coins,
+          "Shared": Users,
+          "Private": Lock
         }
       },
       { 
         id: "auto", 
         label: "Auto Rickshaw", 
+        emoji: "🛺",
         icon: Zap, 
         tag: "Cheapest",
-        options: ["Standard", "Premium", "Air-Conditioned"],
+        options: ["Cheap", "Fast", "Comfort"],
         optionIcons: {
-          "Standard": Package,
-          "Premium": Trophy,
-          "Air-Conditioned": Wind
+          "Cheap": Coins,
+          "Fast": Bolt,
+          "Comfort": Armchair
         }
       },
       { 
         id: "cab", 
         label: "Cab", 
-        icon: Car, 
-        options: ["Mini", "Sedan", "SUV", "Luxury"],
+        emoji: "🚖",
+        icon: CarIcon, 
+        options: ["Cheap", "Fast", "Comfort", "Private"],
         optionIcons: {
-          "Mini": Car,
-          "Sedan": Car,
-          "SUV": Car,
-          "Luxury": Trophy
+          "Cheap": Coins,
+          "Fast": Bolt,
+          "Comfort": Armchair,
+          "Private": Lock
         }
       },
       { 
-        id: "pool", 
-        label: "Shared Rides / Pool", 
+        id: "shared", 
+        label: "Shared Rides", 
+        emoji: "👥",
         icon: Users, 
         tag: "Eco",
-        options: ["Pool with Others", "Same Gender", "Women Only"],
+        options: ["Shared", "Cheap", "Comfort"],
         optionIcons: {
-          "Pool with Others": Users,
-          "Same Gender": User,
-          "Women Only": Heart
+          "Shared": Users,
+          "Cheap": Coins,
+          "Comfort": Armchair
+        }
+      },
+      { 
+        id: "eco", 
+        label: "Eco", 
+        emoji: "🚗",
+        icon: Leaf,
+        tag: "Eco-Friendly",
+        options: ["Electric", "Hybrid", "CNG"],
+        optionIcons: {
+          "Electric": Zap,
+          "Hybrid": Leaf,
+          "CNG": WindIcon
         }
       },
       { 
         id: "intercity", 
         label: "Intercity Travel", 
+        emoji: "🚌",
         icon: Map, 
-        options: ["Bus", "Train", "Flight", "Taxi"],
+        options: ["Bus", "Train", "Flight"],
         optionIcons: {
-          "Bus": Package,
-          "Train": Activity,
-          "Flight": Navigation,
-          "Taxi": Car
+          "Bus": BusIcon,
+          "Train": TrainIcon,
+          "Flight": Plane
         }
       },
       { 
         id: "rentals", 
         label: "Rentals", 
-        icon: Clock, 
-        options: ["Hourly", "Daily", "Weekly", "Monthly"],
+        emoji: "🚘",
+        icon: ClockIcon, 
+        options: ["Fast", "Comfort", "Private"],
         optionIcons: {
-          "Hourly": Clock,
-          "Daily": Calendar,
-          "Weekly": Calendar,
-          "Monthly": Calendar
+          "Fast": Bolt,
+          "Comfort": Armchair,
+          "Private": Lock
         }
       },
     ],
@@ -429,28 +469,30 @@ export const categoryConfig: Record<Category, {
       { 
         id: "prescription", 
         label: "Prescription Medicines", 
+        emoji: "💊",
         icon: Pill, 
         badgeText: "Prescription Required", 
         items: ["Antibiotics", "Pain Relief", "Fever Medicine", "Cough Syrup"],
         itemIcons: {
           "Antibiotics": Pill,
           "Pain Relief": Pill,
-          "Fever Medicine": Pill,
+          "Fever Medicine": Thermometer,
           "Cough Syrup": Droplets
         },
-        options: ["Same Day Delivery", "Doctor Consultation", "Refill Reminders", "Insurance Claims"],
+        options: ["Prescription", "OTC", "Emergency", "Daily"],
         optionIcons: {
-          "Same Day Delivery": Clock,
-          "Doctor Consultation": Stethoscope,
-          "Refill Reminders": Calendar,
-          "Insurance Claims": ShieldCheck
+          "Prescription": FileText,
+          "OTC": Pill,
+          "Emergency": Siren,
+          "Daily": Calendar
         }
       },
       { 
         id: "generic", 
         label: "Generic Alternatives", 
-        icon: RefreshCw, 
-        badgeText: "Save up to 70%", 
+        emoji: "🔁",
+        icon: RefreshCw,
+        badgeText: "Save up to 70%",
         highlight: true, 
         items: ["Generic Paracetamol", "Generic Ibuprofen", "Generic Metformin"],
         itemIcons: {
@@ -458,24 +500,24 @@ export const categoryConfig: Record<Category, {
           "Generic Ibuprofen": Pill,
           "Generic Metformin": Pill
         },
-        options: ["Brand Comparison", "Price Tracking", "Side Effect Info", "Usage Guidelines"],
+        options: ["Budget", "Premium", "OTC", "Daily"],
         optionIcons: {
-          "Brand Comparison": Package,
-          "Price Tracking": Activity,
-          "Side Effect Info": ShieldCheck,
-          "Usage Guidelines": HelpCircle
+          "Budget": DollarSign,
+          "Premium": Crown,
+          "OTC": Pill,
+          "Daily": Calendar
         }
       },
       { 
         id: "chronic", 
         label: "Chronic Care", 
+        emoji: "♾️",
         icon: HeartPulse, 
-        options: ["Diabetes", "BP", "Thyroid", "Cholesterol"],
+        options: ["Daily", "Prescription", "Emergency"],
         optionIcons: {
-          "Diabetes": HeartPulse,
-          "BP": HeartPulse,
-          "Thyroid": HeartPulse,
-          "Cholesterol": HeartPulse
+          "Daily": Calendar,
+          "Prescription": FileText,
+          "Emergency": Siren
         },
         items: ["Diabetes", "BP", "Thyroid", "Cholesterol"],
         itemIcons: {
@@ -488,26 +530,28 @@ export const categoryConfig: Record<Category, {
       { 
         id: "wellness", 
         label: "Wellness & Immunity", 
+        emoji: "🛡️",
         icon: Activity, 
         items: ["Multivitamins", "Vitamin C", "Vitamin D", "Omega-3", "Immunity Boosters"],
         itemIcons: {
-          "Multivitamins": Package,
-          "Vitamin C": Package,
-          "Vitamin D": Package,
-          "Omega-3": Package,
+          "Multivitamins": Pill,
+          "Vitamin C": Citrus,
+          "Vitamin D": Droplets,
+          "Omega-3": Fish,
           "Immunity Boosters": Heart
         },
-        options: ["Subscription", "Lab Tests", "Nutritionist", "Health Tracking"],
+        options: ["Daily", "Natural", "Premium", "Pediatric"],
         optionIcons: {
-          "Subscription": RefreshCw,
-          "Lab Tests": Syringe,
-          "Nutritionist": User,
-          "Health Tracking": Activity
+          "Daily": Calendar,
+          "Natural": Leaf,
+          "Premium": Crown,
+          "Pediatric": Baby
         }
       },
       { 
         id: "first-aid", 
         label: "First Aid & Medical Devices", 
+        emoji: "🩹",
         icon: PlusSquare, 
         items: ["Bandages", "Thermometer", "BP Monitor", "Glucometer", "Antiseptic"],
         itemIcons: {
@@ -515,19 +559,19 @@ export const categoryConfig: Record<Category, {
           "Thermometer": Thermometer,
           "BP Monitor": HeartPulse,
           "Glucometer": Syringe,
-          "Antiseptic": ShieldCheck
+          "Antiseptic": SprayCan
         },
-        options: ["Emergency Kit", "Home Delivery", "Healthcare Support", "Medical Supplies"],
+        options: ["Emergency", "Daily", "Prescription"],
         optionIcons: {
-          "Emergency Kit": Package,
-          "Home Delivery": Package,
-          "Healthcare Support": User,
-          "Medical Supplies": Package
+          "Emergency": Siren,
+          "Daily": Calendar,
+          "Prescription": FileText
         }
       },
       { 
         id: "baby-women", 
         label: "Baby, Women & Senior Care", 
+        emoji: "👨‍👩‍👧",
         icon: Baby, 
         items: ["Baby Care", "Women's Health", "Senior Care", "Maternity Products"],
         itemIcons: {
@@ -536,12 +580,11 @@ export const categoryConfig: Record<Category, {
           "Senior Care": User,
           "Maternity Products": Heart
         },
-        options: ["Pediatric Care", "Women's Wellness", "Senior Care", "Maternity Support"],
+        options: ["Pediatric", "Daily", "Natural"],
         optionIcons: {
-          "Pediatric Care": Baby,
-          "Women's Wellness": Heart,
-          "Senior Care": User,
-          "Maternity Support": Heart
+          "Pediatric": Baby,
+          "Daily": Calendar,
+          "Natural": Leaf
         }
       },
     ],
@@ -566,6 +609,7 @@ export const categoryConfig: Record<Category, {
       { 
         id: "fashion", 
         label: "Fashion & Apparel", 
+        emoji: "👕",
         icon: Shirt, 
         items: ["T-Shirts", "Jeans", "Dresses", "Jackets", "Ethnic Wear"],
         itemIcons: {
@@ -575,130 +619,136 @@ export const categoryConfig: Record<Category, {
           "Jackets": Shirt,
           "Ethnic Wear": Shirt
         },
-        options: ["Size Guide", "Material Info", "Care Instructions", "Style Tips"],
+        options: ["Trending", "New", "Discount", "Best Sellers"],
         optionIcons: {
-          "Size Guide": Package,
-          "Material Info": Package,
-          "Care Instructions": HelpCircle,
-          "Style Tips": Palette
+          "Trending": Flame,
+          "New": Star,
+          "Discount": Percent,
+          "Best Sellers": Award
         }
       },
       { 
         id: "electronics", 
         label: "Electronics & Gadgets", 
+        emoji: "📱",
         icon: Smartphone, 
         items: ["Mobile Phones", "Earphones", "Smart Watches", "Laptops", "Tablets"],
         itemIcons: {
           "Mobile Phones": Smartphone,
           "Earphones": Package,
-          "Smart Watches": Package,
+          "Smart Watches": Clock,
           "Laptops": Package,
           "Tablets": Package
         },
-        options: ["Warranty", "Exchange Offers", "EMI Plans", "Extended Warranty"],
+        options: ["Discount", "New", "Best Sellers", "Premium"],
         optionIcons: {
-          "Warranty": ShieldCheck,
-          "Exchange Offers": RefreshCw,
-          "EMI Plans": CreditCard,
-          "Extended Warranty": ShieldCheck
+          "Discount": Percent,
+          "New": Star,
+          "Best Sellers": Award,
+          "Premium": Crown
         }
       },
       { 
         id: "home-kitchen", 
         label: "Home & Kitchen", 
+        emoji: "🏠",
         icon: Home, 
         items: ["Cookware", "Appliances", "Bedding", "Furniture", "Decor"],
         itemIcons: {
-          "Cookware": Package,
+          "Cookware": UtensilsCrossed,
           "Appliances": Package,
-          "Bedding": Package,
-          "Furniture": Package,
+          "Bedding": Home,
+          "Furniture": Home,
           "Decor": Palette
         },
-        options: ["Assembly", "Installation", "Maintenance", "Customization"],
+        options: ["New", "Discount", "Premium", "Trending"],
         optionIcons: {
-          "Assembly": Package,
-          "Installation": Package,
-          "Maintenance": RefreshCw,
-          "Customization": PenTool
+          "New": Star,
+          "Discount": Percent,
+          "Premium": Crown,
+          "Trending": Flame
         }
       },
       { 
         id: "footwear", 
         label: "Footwear & Accessories", 
+        emoji: "👟",
         icon: Footprints, 
         items: ["Sneakers", "Formal Shoes", "Sandals", "Bags", "Belts"],
         itemIcons: {
-          "Sneakers": Package,
-          "Formal Shoes": Package,
-          "Sandals": Package,
+          "Sneakers": Footprints,
+          "Formal Shoes": Footprints,
+          "Sandals": Footprints,
           "Bags": Package,
           "Belts": Package
         },
-        options: ["Size Chart", "Material Type", "Comfort Rating", "Durability"],
+        options: ["Trending", "New", "Discount", "Premium"],
         optionIcons: {
-          "Size Chart": Package,
-          "Material Type": Package,
-          "Comfort Rating": Heart,
-          "Durability": ShieldCheck
+          "Trending": Flame,
+          "New": Star,
+          "Discount": Percent,
+          "Premium": Crown
         }
       },
       { 
         id: "beauty-personal", 
         label: "Beauty & Personal Care", 
+        emoji: "🧴",
         icon: Sparkles, 
         items: ["Skincare", "Haircare", "Fragrances", "Grooming"],
         itemIcons: {
-          "Skincare": Package,
-          "Haircare": Package,
-          "Fragrances": Package,
-          "Grooming": Package
+          "Skincare": Droplets,
+          "Haircare": Scissors,
+          "Fragrances": SprayCan,
+          "Grooming": User
         },
-        options: ["Skin Type", "Hair Type", "Sensitivity", "Ingredients"],
+        options: ["Natural", "Luxury", "Sensitive", "New"],
         optionIcons: {
-          "Skin Type": User,
-          "Hair Type": Scissors,
-          "Sensitivity": Heart,
-          "Ingredients": Leaf
+          "Natural": Leaf,
+          "Luxury": Gem,
+          "Sensitive": ShieldCheck,
+          "New": Star
         }
       },
       { 
         id: "sports", 
         label: "Sports", 
+        emoji: "⚽",
         icon: Trophy, 
         items: ["Fitness Equipment", "Sports Shoes", "Yoga Mats", "Sportswear"],
         itemIcons: {
           "Fitness Equipment": Activity,
-          "Sports Shoes": Package,
+          "Sports Shoes": Footprints,
           "Yoga Mats": Package,
           "Sportswear": Shirt
         },
-        options: ["Performance", "Durability", "Comfort", "Breathability"],
+        options: ["Trending", "Best Sellers", "New", "Premium"],
         optionIcons: {
-          "Performance": Trophy,
-          "Durability": ShieldCheck,
-          "Comfort": Heart,
-          "Breathability": Wind
+          "Trending": Flame,
+          "Best Sellers": Award,
+          "New": Star,
+          "Premium": Crown
         }
       },
       { 
         id: "books", 
         label: "Books & More", 
+        emoji: "📚",
         icon: Book, 
         items: ["Fiction", "Non-Fiction", "Stationery", "Toys", "Games"],
         itemIcons: {
           "Fiction": Book,
           "Non-Fiction": Book,
-          "Stationery": Package,
+          "Stationery": Pencil,
           "Toys": Gamepad,
           "Games": Gamepad
         },
-        options: ["Reviews", "Author Info", "Reading Level", "Age Group"],
+        options: ["Best Sellers", "New", "Discount", "Trending"],
         optionIcons: {
-          "Reviews": Users,
-          "Author Info": User,
-          "Reading Level": Book,
-          "Age Group": Users
+          "Best Sellers": Award,
+          "New": Star,
+          "Discount": Percent,
+          "Trending": Flame
         }
       },
     ],

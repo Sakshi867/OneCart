@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Clock, Truck, Badge, ArrowRight, TrendingDown } from "lucide-react";
-import type { MockResult } from "@/lib/categories";
+import { Star, Clock, Truck, Badge, ArrowRight, TrendingDown, ArrowLeft, CheckCircle2 } from "lucide-react";
+import type { MockResult, SubCategory } from "@/lib/categories";
+import { Button } from "@/components/ui/button";
 
 interface ComparisonResultsProps {
   results: MockResult[];
   query: string;
   isTransport?: boolean;
+  selectedTransportType?: SubCategory | null;
+  onBackToTransportTypes?: () => void;
 }
 
-const ComparisonResults = ({ results, query, isTransport = false }: ComparisonResultsProps) => {
+const ComparisonResults = ({ results, query, isTransport = false, selectedTransportType, onBackToTransportTypes }: ComparisonResultsProps) => {
   const [sort, setSort] = useState<"price" | "time" | "rating">("price");
 
   // Mock sorting logic
@@ -30,6 +33,54 @@ const ComparisonResults = ({ results, query, isTransport = false }: ComparisonRe
 
   return (
     <div className="space-y-4 pb-20">
+      {/* Back Button for Transport */}
+      {isTransport && onBackToTransportTypes && (
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-4"
+        >
+          <Button
+            variant="ghost"
+            onClick={onBackToTransportTypes}
+            className="gap-2 text-primary hover:text-primary hover:bg-primary/10 rounded-full font-semibold"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Transport Types
+          </Button>
+        </motion.div>
+      )}
+
+      {/* Selected Transport Type Badge */}
+      {isTransport && selectedTransportType && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-gradient-to-r from-primary/10 to-purple-500/10 border-2 border-primary/30 rounded-xl p-4 mb-4 shadow-lg"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shadow-md">
+              <span className="text-2xl">{selectedTransportType.emoji || "🚗"}</span>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-primary" />
+                <span className="font-bold text-lg text-foreground">
+                  Selected: {selectedTransportType.label}
+                </span>
+              </div>
+              {selectedTransportType.tag && (
+                <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full mt-1 inline-block">
+                  {selectedTransportType.tag}
+                </span>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       <div className="flex items-center justify-between">
         <h3 className="font-bold text-foreground">
           {isTransport ? "Fare Comparison" : "Price Comparison"} — <span className="text-primary">{query}</span>
