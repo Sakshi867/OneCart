@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCategory, type Category } from "@/contexts/CategoryContext";
 import { categoryConfig } from "@/lib/categories";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const categories: Category[] = ["groceries", "cosmetics", "transport", "medicines", "shopping"];
 
@@ -20,8 +21,16 @@ const Dashboard = () => {
             <motion.header
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center px-6 py-5 max-w-5xl mx-auto"
+                className="flex items-center gap-4 px-6 py-5 max-w-5xl mx-auto"
             >
+                <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => navigate("/")}
+                    className="rounded-full hover:bg-accent/50"
+                >
+                    <ArrowLeft className="w-6 h-6 text-foreground" />
+                </Button>
                 <h1
                     className="text-2xl font-extrabold font-heading cursor-pointer text-foreground"
                     onClick={() => navigate("/")}
