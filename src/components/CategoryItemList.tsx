@@ -81,8 +81,14 @@ const CategoryItemList = ({ subcategory, onItemClick, onBack }: CategoryItemList
 
                             <div className="relative flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shadow-inner">
-                                    {/* Placeholder emoji logic or generic icon */}
-                                    <span className="text-lg">🛒</span>
+                                    {subcategory.itemIcons && subcategory.itemIcons[item] ? (
+                                        (() => {
+                                            const IconComponent = subcategory.itemIcons[item];
+                                            return <IconComponent className="w-5 h-5 text-primary" />;
+                                        })()
+                                    ) : (
+                                        <span className="text-lg">🛒</span>
+                                    )}
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">{item}</h3>

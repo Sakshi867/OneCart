@@ -23,14 +23,22 @@ const CategoryHome = () => {
   const { setCategory } = useCategory();
   const cat = id as Category;
   const cfg = categoryConfig[cat];
+  
+  // State
   const [showResults, setShowResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [activeSubcategory, setActiveSubcategory] = useState<SubCategory | null>(null);
+  const [selectedTransportType, setSelectedTransportType] = useState<SubCategory | null>(null);
   const [activeItemForBrand, setActiveItemForBrand] = useState<string | null>(null);
   const [searchResults, setSearchResults] = useState<MockResult[] | null>(null);
+  
+  // Transport location state
   const [pickupVal, setPickupVal] = useState("");
   const [dropoffVal, setDropoffVal] = useState("");
+  const [pickupValid, setPickupValid] = useState(false);
+  const [dropoffValid, setDropoffValid] = useState(false);
+  const [showTransportTypes, setShowTransportTypes] = useState(false);
 
   const searchMutation = useMutation({
     mutationFn: async () => {
@@ -44,20 +52,23 @@ const CategoryHome = () => {
       setSearchResults(data);
       setIsSearching(false);
       setShowResults(true);
+      setSelectedTransportType(null); // Clear selection when showing results
     },
     onError: (error) => {
       console.error("Search failed:", error);
-      // Fallback to mock data on error for demo purposes
       setSearchResults(cfg.mockResults);
       setIsSearching(false);
       setShowResults(true);
+      setSelectedTransportType(null);
     }
   });
+
+  const isTransport = cat === "transport";
+  const isGroceries = cat === "groceries";
 
   useEffect(() => {
     if (cfg) setCategory(cat);
 
-    // Handle query parameter
     const query = searchParams.get("q");
     if (query) {
       setSearchVal(query);
@@ -78,13 +89,55 @@ const CategoryHome = () => {
     return null;
   }
 
-  const isTransport = cat === "transport";
-  const isGroceries = cat === "groceries";
+  const handleCompareFares = () => {
+    const isPickupValid = pickupVal.trim() !== "";
+    const isDropoffValid = dropoffVal.trim() !== "";
+    
+    if (!isPickupValid || !isDropoffValid) {
+      return;
+    }
+    
+    // Navigate to transport types screen
+    setShowTransportTypes(true);
+  };
 
-  const handleSearch = () => {
+  const handleSelectTransportType = (sub: SubCategory) => {
+    setSelectedTransportType(sub);
     setIsSearching(true);
     setShowResults(false);
     searchMutation.mutate();
+  };
+
+  const handleBackToTransportTypes = () => {
+    setSelectedTransportType(null);
+    setShowResults(false);
+    setSearchResults(null);
+  };
+
+  const handleChangeLocations = () => {
+    setShowTransportTypes(false);
+    setSelectedTransportType(null);
+    setPickupVal("");
+    setDropoffVal("");
+    setPickupValid(false);
+    setDropoffValid(false);
+    setShowResults(false);
+    setSearchResults(null);
+  };
+
+  const handleSearch = () => {
+    if (isTransport && !showTransportTypes) {
+      handleCompareFares();
+      return;
+    }
+    
+    setIsSearching(true);
+    setShowResults(false);
+    searchMutation.mutate();
+  };
+
+  const getTransportEmoji = (sub: SubCategory) => {
+    return sub.emoji || "🚗";
   };
 
   return (
@@ -108,10 +161,8 @@ const CategoryHome = () => {
             variant="ghost" 
             size="icon" 
             onClick={() => {
-              if (showResults) {
-                setShowResults(false);
-                setSearchVal("");
-                setSearchParams({});
+              if (showResults || showTransportTypes || selectedTransportType) {
+                handleChangeLocations();
               } else if (activeItemForBrand) {
                 setActiveItemForBrand(null);
               } else if (activeSubcategory) {
@@ -198,88 +249,102 @@ const CategoryHome = () => {
         </div>
       </motion.section>
 
-      {/* Search */}
+      {/* Search / Location Input */}
       <motion.section
         className="max-w-3xl mx-auto px-6 -mt-7 relative z-10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="bg-card rounded-2xl shadow-xl border border-border p-6 sm:p-8 space-y-5 backdrop-blur-sm bg-white/70">
-          {isTransport ? (
-            <div className="space-y-4">
-              <div className="relative group">
-                <MapPin className="absolute left-4 top-4 h-5 w-5 text-primary transition-colors group-focus-within:text-pink-500" />
-                <Input
-                  placeholder="From — Enter pickup location"
-                  className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
-                  value={pickupVal}
-                  onChange={(e) => setPickupVal(e.target.value)}
-                />
-              </div>
-              <div className="relative group">
-                <MapPin className="absolute left-4 top-4 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-pink-500" />
-                <Input
-                  placeholder="To — Enter destination"
-                  className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
-                  value={dropoffVal}
-                  onChange={(e) => setDropoffVal(e.target.value)}
-                />
-              </div>
-              <Button
-                className="w-full h-14 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-purple-500 hover:from-pink-500 hover:to-purple-600"
-                onClick={handleSearch}
-                disabled={isSearching}
-              >
-                {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : "Compare Fares"}
-              </Button>
-            </div>
-          ) : (
-            <>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="relative flex-1 group">
-                  <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-pink-500" />
+        {!showTransportTypes && !selectedTransportType && (
+          <div className="bg-card rounded-2xl shadow-xl border border-border p-6 sm:p-8 space-y-5 backdrop-blur-sm bg-white/70">
+            {isTransport ? (
+              <div className="space-y-4">
+                <div className="relative group">
+                  <MapPin className="absolute left-4 top-4 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-pink-500" />
                   <Input
-                    placeholder={cfg.searchPlaceholder}
+                    placeholder="From — Enter pickup location"
                     className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
-                    value={searchVal}
-                    onChange={(e) => setSearchVal(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    value={pickupVal}
+                    onChange={(e) => {
+                      setPickupVal(e.target.value);
+                      setPickupValid(e.target.value.trim() !== "");
+                    }}
                   />
                 </div>
+                <div className="relative group">
+                  <MapPin className="absolute left-4 top-4 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-pink-500" />
+                  <Input
+                    placeholder="To — Enter destination"
+                    className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
+                    value={dropoffVal}
+                    onChange={(e) => {
+                      setDropoffVal(e.target.value);
+                      setDropoffValid(e.target.value.trim() !== "");
+                    }}
+                  />
+                </div>
+                {(!pickupValid || !dropoffValid) && (
+                  <div className="text-sm text-muted-foreground bg-accent/30 rounded-xl p-3">
+                    {!pickupValid && !dropoffValid
+                      ? "Enter pickup and drop location to see fare"
+                      : !pickupValid
+                        ? "Enter pickup location to see fare"
+                        : "Enter destination to see fare"}
+                  </div>
+                )}
                 <Button
-                  className="h-14 px-8 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-purple-500 hover:from-pink-500 hover:to-purple-600"
-                  onClick={handleSearch}
-                  disabled={isSearching}
+                  className="w-full h-14 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-purple-500 hover:from-pink-500 hover:to-purple-600"
+                  onClick={handleCompareFares}
+                  disabled={!pickupValid || !dropoffValid}
                 >
-                  {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : "Search Now"}
+                  Compare Fares
                 </Button>
+                
+                {!showResults && !isSearching && (
+                  <button
+                    onClick={() => {
+                      setPickupVal("Connaught Place");
+                      setDropoffVal("IGI Airport");
+                      setPickupValid(true);
+                      setDropoffValid(true);
+                      setTimeout(handleCompareFares, 100);
+                    }}
+                    className="text-xs text-primary hover:underline font-medium"
+                  >
+                    Try demo: "Connaught Place → IGI Airport"
+                  </button>
+                )}
               </div>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground bg-accent/30 rounded-xl p-4">
-                <Link2 className="h-5 w-5 text-primary" />
-                <span>Or paste a product link to compare instantly</span>
-              </div>
-            </>
-          )}
-
-          {/* Quick demo button */}
-          {!showResults && !isSearching && (
-            <button
-              onClick={() => {
-                if (isTransport) {
-                  setPickupVal("Connaught Place");
-                  setDropoffVal("IGI Airport");
-                } else {
-                  setSearchVal(cfg.mockQuery);
-                }
-                setTimeout(handleSearch, 100);
-              }}
-              className="text-xs text-primary hover:underline font-medium"
-            >
-              Try demo: "{cfg.mockQuery}"
-            </button>
-          )}
-        </div>
+            ) : (
+              <>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="relative flex-1 group">
+                    <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-pink-500" />
+                    <Input
+                      placeholder={cfg.searchPlaceholder}
+                      className="pl-12 h-14 rounded-2xl border-2 focus:border-pink-300 focus:ring-2 focus:ring-pink-200/50 transition-all duration-300"
+                      value={searchVal}
+                      onChange={(e) => setSearchVal(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    />
+                  </div>
+                  <Button
+                    className="h-14 px-8 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-purple-500 hover:from-pink-500 hover:to-purple-600"
+                    onClick={handleSearch}
+                    disabled={isSearching}
+                  >
+                    {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : "Search Now"}
+                  </Button>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground bg-accent/30 rounded-xl p-4">
+                  <Link2 className="h-5 w-5 text-primary" />
+                  <span>Or paste a product link to compare instantly</span>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </motion.section>
 
       {/* Results */}
@@ -320,27 +385,41 @@ const CategoryHome = () => {
               <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-2xl font-bold text-foreground mb-1">
-                    Results for "{isTransport ? `${pickupVal} to ${dropoffVal}` : searchVal || cfg.mockQuery}"
+                    {selectedTransportType ? (
+                      <span className="flex items-center gap-2">
+                        {selectedTransportType.label}: {pickupVal} → {dropoffVal}
+                      </span>
+                    ) : (
+                      `Results for "${pickupVal} to ${dropoffVal}"`
+                    )}
                   </h3>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Sparkles className="h-4 w-4 text-primary animate-twinkle" />
                     <span>Found {(searchResults || cfg.mockResults).length} options for you</span>
                   </div>
                 </div>
-                {cfg.subcategories && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setSearchVal("");
-                      setShowResults(false);
-                      setSearchParams({});
-                    }}
-                    className="text-primary hover:text-primary hover:bg-primary/10 rounded-full gap-2 font-bold"
-                  >
-                    Back to Browse
-                  </Button>
-                )}
+                <div className="flex gap-2">
+                  {selectedTransportType && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleBackToTransportTypes}
+                      className="text-primary hover:text-primary hover:bg-primary/10 rounded-full gap-2 font-bold"
+                    >
+                      Back to All Transport Types
+                    </Button>
+                  )}
+                  {!selectedTransportType && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleChangeLocations}
+                      className="text-primary hover:text-primary hover:bg-primary/10 rounded-full gap-2 font-bold"
+                    >
+                      Change Locations
+                    </Button>
+                  )}
+                </div>
               </div>
 
               {/* SmartSaver Battle Mode Hero */}
@@ -362,43 +441,80 @@ const CategoryHome = () => {
                 results={searchResults || cfg.mockResults}
                 query={isTransport ? `${pickupVal} to ${dropoffVal}` : searchVal || cfg.mockQuery}
                 isTransport={isTransport}
+                selectedTransportType={selectedTransportType}
+                onBackToTransportTypes={handleBackToTransportTypes}
               />
             </motion.div>
           )}
 
-          {!showResults && !isSearching && (
+          {showTransportTypes && !isSearching && !showResults && (
+            <motion.div
+              key="transport-types"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold text-foreground mb-1">
+                      {pickupVal} → {dropoffVal}
+                    </h3>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Sparkles className="h-4 w-4 text-primary animate-twinkle" />
+                      <span>Select a transport type to compare fares</span>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleChangeLocations}
+                    className="text-primary hover:text-primary hover:bg-primary/10 rounded-full gap-2 font-bold"
+                  >
+                    <ArrowLeft className="h-4 w-4" /> Change Locations
+                  </Button>
+                </div>
+                
+                {/* Transport Types Grid */}
+                <ExpandingMorphPanel
+                  subcategories={cfg.subcategories || []}
+                  activeCategory={cfg.label.split(' — ')[0]}
+                  themeClass={cfg.bgClass}
+                  onSubcategorySelect={handleSelectTransportType}
+                />
+              </div>
+            </motion.div>
+          )}
+
+          {!showResults && !isSearching && !showTransportTypes && !selectedTransportType && (
             <motion.div
               key="browse-or-empty"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
               {activeItemForBrand ? (
-                <div className={cfg.bgClass.split(' ')[1] || ""}>
-                  <BrandSelectionStep
-                    itemLabel={activeItemForBrand}
-                    brands={getBrandsForItem(activeItemForBrand)}
-                    onSelect={(brand) => {
-                      const finalQuery = brand ? `${brand} ${activeItemForBrand}` : activeItemForBrand;
-                      setSearchVal(finalQuery);
-                      setActiveItemForBrand(null);
-                      setActiveSubcategory(null); // Clear item list too so Back to Browse works properly
-                      // Use a timeout to ensure state is set before search mutation fires
-                      setTimeout(() => searchMutation.mutate(), 0);
-                    }}
-                    onBack={() => setActiveItemForBrand(null)}
-                  />
-                </div>
+                <BrandSelectionStep
+                  itemLabel={activeItemForBrand}
+                  brands={getBrandsForItem(activeItemForBrand)}
+                  onSelect={(brand) => {
+                    const finalQuery = brand ? `${brand} ${activeItemForBrand}` : activeItemForBrand;
+                    setSearchVal(finalQuery);
+                    setActiveItemForBrand(null);
+                    setActiveSubcategory(null);
+                    setTimeout(() => searchMutation.mutate(), 0);
+                  }}
+                  onBack={() => setActiveItemForBrand(null)}
+                />
               ) : activeSubcategory ? (
-                <div className={cfg.bgClass.split(' ')[1] || ""}>
-                  <CategoryItemList
-                    subcategory={activeSubcategory}
-                    onBack={() => setActiveSubcategory(null)}
-                    onItemClick={(item) => {
-                      setActiveItemForBrand(item);
-                    }}
-                  />
-                </div>
-              ) : cfg.subcategories ? (
+                <CategoryItemList
+                  subcategory={activeSubcategory}
+                  onBack={() => setActiveSubcategory(null)}
+                  onItemClick={(item) => {
+                    setActiveItemForBrand(item);
+                  }}
+                />
+              ) : cfg.subcategories && !isTransport ? (
                 <ExpandingMorphPanel
                   subcategories={cfg.subcategories}
                   activeCategory={cfg.label.split(' — ')[0]}
@@ -406,14 +522,11 @@ const CategoryHome = () => {
                   onSubcategorySelect={(sub) => {
                     if (sub.items && sub.items.length > 0) {
                       if (sub.items.includes(sub.label)) {
-                        // This is an item click from the expanded panel
                         setActiveItemForBrand(sub.label);
                       } else {
-                        // This is a header click, show the item list
                         setActiveSubcategory(sub);
                       }
                     } else {
-                      // No items, so this is definitely a header click, start search
                       setSearchVal(sub.label);
                       handleSearch();
                     }
@@ -442,7 +555,6 @@ const CategoryHome = () => {
           )}
         </AnimatePresence>
       </section>
-
     </div>
   );
 };

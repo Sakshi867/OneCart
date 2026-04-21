@@ -98,24 +98,34 @@ const CategorySubGrid = ({ categoryId, onSubCategoryClick }: CategorySubGridProp
                     </Button>
                     <h3 className="text-2xl font-bold text-foreground mb-6">{selectedItemSub.label}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {selectedItemSub.items.map((item, i) => (
-                            <motion.button
-                                key={i}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: i * 0.05 }}
-                                onClick={() => {
-                                    onSubCategoryClick(item);
-                                    setSelectedItemSub(null);
-                                }}
-                                className="group relative bg-white rounded-xl p-4 border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left"
-                            >
-                                <div className="flex items-center justify-between">
-                                    <span className="font-semibold text-slate-900">{item}</span>
-                                    <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                                </div>
-                            </motion.button>
-                        ))}
+                        {selectedItemSub.items.map((item, i) => {
+                            const ItemIcon = selectedItemSub.itemIcons?.[item];
+                            return (
+                                <motion.button
+                                    key={i}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: i * 0.05 }}
+                                    onClick={() => {
+                                        onSubCategoryClick(item);
+                                        setSelectedItemSub(null);
+                                    }}
+                                    className="group relative bg-white rounded-xl p-4 border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            {ItemIcon && (
+                                                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                                                    <ItemIcon className="w-5 h-5 text-primary" />
+                                                </div>
+                                            )}
+                                            <span className="font-semibold text-slate-900">{item}</span>
+                                        </div>
+                                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                </motion.button>
+                            );
+                        })}
                     </div>
                 </div>
             ) : (
@@ -171,16 +181,22 @@ const CategorySubGrid = ({ categoryId, onSubCategoryClick }: CategorySubGridProp
                         </DrawerTitle>
                     </DrawerHeader>
                     <div className="p-4 pb-8 max-w-md mx-auto w-full grid grid-cols-2 gap-4">
-                        {selectedSub?.options.map((opt) => (
-                            <Button
-                                key={opt}
-                                variant="outline"
-                                className="h-16 text-lg font-medium border-2 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all"
-                                onClick={() => handleOptionSelect(opt)}
-                            >
-                                {opt}
-                            </Button>
-                        ))}
+                        {selectedSub?.options.map((opt) => {
+                            const cfg = categoryConfig[categoryId];
+                            const sub = cfg.subcategories?.find(s => s.label === selectedSub.label);
+                            const OptionIcon = sub?.optionIcons?.[opt];
+                            return (
+                                <Button
+                                    key={opt}
+                                    variant="outline"
+                                    className="h-20 text-lg font-medium border-2 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex flex-col items-center gap-2"
+                                    onClick={() => handleOptionSelect(opt)}
+                                >
+                                    {OptionIcon && <OptionIcon className="w-5 h-5" />}
+                                    <span>{opt}</span>
+                                </Button>
+                            );
+                        })}
                     </div>
                 </DrawerContent>
             </Drawer>

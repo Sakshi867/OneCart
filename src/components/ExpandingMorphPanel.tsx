@@ -150,10 +150,16 @@ const ExpandingPanelItem = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${colors.primary} flex items-center justify-center shadow-md ring-1 ring-white/20`}>
-              <Icon className={`h-7 w-7 ${colors.text}`} />
+              {subcategory.emoji ? (
+                <span className="text-3xl">{subcategory.emoji}</span>
+              ) : (
+                <Icon className={`h-7 w-7 ${colors.text}`} />
+              )}
             </div>
             <div>
-              <h4 className="font-bold text-xl text-foreground">{subcategory.label}</h4>
+              <h4 className="font-bold text-xl text-foreground">
+                {subcategory.label}
+              </h4>
               {subcategory.tag && (
                 <span className={`inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r ${colors.primary} ${colors.text} shadow-sm`}>
                   {subcategory.tag}
